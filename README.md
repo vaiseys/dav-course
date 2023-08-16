@@ -1,4 +1,4 @@
-# 223 - Introduction to Data Science 
+# Sociology 223 - Data Analysis and Visualization
 
 Hi folks, welcome to the repository for the Introduction to Data Science course. Here, you are going to find: 
 
