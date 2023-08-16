@@ -1,0 +1,21 @@
+.Rproj.user/
+.RHistory 
+.RData
+*_cache/
+/cache/
+
+# don't want this saved to repo but need it in the project folder sometimes
+/MD-Data/*
+/misc/*
+
+# not sure if this is a good idea
+*_files
+
+# don't want the homework .Rmds in the repo
+# even if we put them in the folder
+/homework/*.Rmd
+/homework/*.html
+
+
+# raw homework Rmds
+/hw_rmds/
