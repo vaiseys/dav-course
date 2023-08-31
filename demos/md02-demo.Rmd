@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-If you need to install the `worldfootballR` package (which you probably do), don't forget to install it.
+If you need to install the `worldfootballR` package (which you probably do), don't forget to install it. Remember to `install.packages()` in the console, not in a script file!
 
 ```{r, eval=FALSE}
 install.packages("worldfootballR")
