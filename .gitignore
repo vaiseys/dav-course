@@ -8,7 +8,7 @@
 /MD-Data/*
 /misc/*
 
-# not sure if this is a good idea
+# not sure if this is a good idea (it is)
 *_files
 
 # don't want the homework .Rmds in the repo
@@ -16,6 +16,8 @@
 /homework/*.Rmd
 /homework/*.html
 
+# don't add rendered demos
+/demos/*.html
 
 # raw homework Rmds
 /hw_rmds/
