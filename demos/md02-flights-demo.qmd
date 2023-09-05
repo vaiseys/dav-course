@@ -1,0 +1,14 @@
+---
+title: "demo"
+author: "Prof Vaisey"
+format: html
+embed-resources: true
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+data(flights)
+```
