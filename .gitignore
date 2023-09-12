@@ -1,5 +1,5 @@
 .Rproj.user/
-.RHistory 
+.RHistory
 .RData
 *_cache/
 /cache/
@@ -18,6 +18,9 @@
 
 # don't add rendered demos
 /demos/*.html
+/old_demos/*.html
+/output/
 
 # raw homework Rmds
 /hw_rmds/
+/.quarto/

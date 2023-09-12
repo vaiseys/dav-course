@@ -1,0 +1,31 @@
+---
+title: "MD3 Alternate Demo"
+format: html
+embed-resources: true
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(worldfootballR)
+```
+
+```{r}
+#|cache: TRUE
+
+d <- fb_match_results(
+  country = "USA",
+  gender = "F",
+  season_end_year = c(2021,2022,2023) # since covid
+)  
+  
+d <- d |> 
+  drop_na(HomeGoals, AwayGoals) |> 
+  select(Season_End_Year, 
+         Home,
+         HomeGoals,
+         Home_xG,
+         Away,
+         AwayGoals,
+         Away_xG)
+```

@@ -1,6 +1,7 @@
 ---
 title: "MD3 Demo"
 format: html
+embed-resources: true
 editor: visual
 ---
 
