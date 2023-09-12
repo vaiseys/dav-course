@@ -86,7 +86,7 @@ us_medals <- gold_medalists %>%
 
 You have two columns now: one for year and one for the number of Gold Medals won that year. Plot this trajectory as a linegraph. 
 
-What was the country's most successful year? As a bonus, can you guess why the line is so wiggly (technical term) towards the end? 
+What was the country's most successful year? As a bonus, can you guess why the line is so wiggly towards the end? 
 
 ## Question 4 
 
@@ -97,9 +97,9 @@ Now, let's explore differences in the kind of athlete that has excelled at diffe
 two_events <- gold_medalists %>%
   filter(
     event == "Gymnastics Men's Individual All-Around"  |
-      event == "Gymnastics Women's Individual All-Around" |
-      event == "Athletics Women's 100 metres"   |
-      event == "Athletics Men's 100 metres"
+    event == "Gymnastics Women's Individual All-Around" |
+    event == "Athletics Women's 100 metres"   |
+    event == "Athletics Men's 100 metres"
   ) 
 ```
 
@@ -111,7 +111,7 @@ Now, try to see whether there are differences between female and male athletes b
 
 ## Question 5
 
-Now, you're going to use boxplots to show me which one of the events above has taller athletes. Make a boxplot where the x-axis is event and the y-axis is height. 
+Now, you're going to use boxplots to show me which one of the two events above has taller athletes. Make a boxplot where the x-axis is event and the y-axis is height. 
 
 Briefly describe your results. 
 
@@ -119,7 +119,7 @@ Briefly describe your results.
 
 Now, let's do another exercise. We will explore the proportion of U.S. medals that were won by male and female athletes each year. 
 
-First, let's keep only U.S. cases. 
+Let's go back to gold medalists and keep only U.S. cases. 
 
 
 ```r
