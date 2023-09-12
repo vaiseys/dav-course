@@ -1,0 +1,218 @@
+---
+title: "MD3 Demo"
+format: html
+editor: visual
+---
+
+## Writing code
+
+Here's a tip for writing code in RStudio *and on the Ed Discussion board*.
+
+If you surround text with backticks, it turns into code: \`ggplot()\` becomes `ggplot()`. You can also do this with blocks of code. If you start and end several lines of text with a "code fence" \`\`\` it renders as code. This is only visual. It doesn't actually run.
+
+```         
+ggplot(d,
+       aes(x = x)) +
+       geom_histogram()
+```
+
+## Review
+
+Let's take a look at the `c()` operator. Here "c" stands for "concatenate" and it's something we'll need if we want to give R a vector of *numbers* or of *characters.*
+
+```{r}
+print(c(1,2,3,4,5))
+print(c("hello", "world"))
+```
+
+If you got rid of the `c()` surrounding the elements, this wouldn't work.
+
+## Data Wrangling
+
+This is a term that encompasses all forms of data transformation and selection. We are going to focus on 5 key `dplyr` verbs:
+
+-   `filter()`
+
+-   `select()`
+
+-   `mutate()`
+
+-   `summarize()`
+
+-   `group_by()`
+
+There are others that are useful, like `arrange()` and `join()` that we won't have time to look at today. But remember you have the book!
+
+### filter()
+
+Before we start, remember we have to load the libraries we need. We could also set a graph theme here if we don't want to type it every time.
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+theme_set(theme_minimal())
+```
+
+We will bring in the `flights` data and do some work on it. Say we want just the flights from JFK.
+
+NOTE: we are also going to use `drop_na()` to get rid of flights that have some information missing! This is actually a kind of filtering, too.
+
+```{r}
+data(flights)
+
+jfk_flights <- flights |> 
+  filter(origin == "JFK") |> 
+  drop_na()
+```
+
+### select()
+
+This is how we get rid of columns. We won't really need to do this today but it will be useful later. In this case, all the observations are from 2013 so let's get rid of the `year` variable.
+
+```{r}
+jfk_flights <- jfk_flights |> 
+  select(-year)
+```
+
+Alternatively, we could give it variables we wanted to keep. (We're not going to save this as a new object; this is just to show you.)
+
+```{r}
+jfk_flights |> 
+  select(dest, carrier) |> 
+  glimpse()
+```
+
+### mutate()
+
+We use this to create new variables out of existing variables. For example, let's say we wanted to know whether a flight's departure was delayed by more than 15 minutes. We have a variable, `dep_delay`, that encodes how many minutes later (or sooner) a flight left than scheduled. We can use this to make the new variable we want.
+
+```{r}
+jfk_flights <- jfk_flights |> 
+  mutate(departed_late = if_else(dep_delay > 15, 1L, 0L))
+```
+
+There's a lot going on here! The `if_else()` function takes another variable and performs on logical check on each row. If the logical statement evaluates to `TRUE`, then the new variable takes the first option (here, `1L`). If the logical statement evaluates to `FALSE`, then the new variable takes the second option (`0L`). The `L` here just means "this is an integer". This is so R doesn't waste space, for example, storing a 1 as 1.0000000...
+
+We could use skills we have already to count the number of flights delayed by more than 15 minutes.
+
+```{r}
+ggplot(jfk_flights,
+       aes(x = departed_late)) +
+  geom_bar()
+```
+
+This isn't a very nice graph, but it gives us the idea.
+
+### summarize()
+
+If we wanted to calculate the proportion late, we could use this function. It "collapses" the data frame down. Like `mutate()` it also uses a formula to create a new variable out of data that is already there. Consider this:
+
+```{r}
+jfk_flights |> 
+  summarize(prop_late = mean(departed_late))
+```
+
+This gives us the total proportion of flights that were delayed by more than 15 minutes.
+
+### group_by()
+
+If we want to perform a `summarize()` of different subsets of the data, this is a very useful function. The `group_by()` function tells R to do *all subsequent operations separately for the groups indicated*. Here's an example:
+
+```{r}
+jfk_flights |> 
+  group_by(carrier) |> 
+  summarize(prop_late = mean(departed_late))
+```
+
+The `arrange()` function is a less important function in the grand scheme of things but it's useful here to sort the observations if we want. If we want to sort descending (highest to lowest), we can wrap the variable in `desc()`; otherwise it sorts ascending (lowest to highest).
+
+```{r}
+jfk_flights |> 
+  group_by(carrier) |> 
+  summarize(prop_late = mean(departed_late)) |> 
+  arrange(desc(prop_late))
+```
+
+We don't have to just summarize to one value. We can also get a new variable for how many flights (i.e., rows) belong to each carrier. The function to just count rows is `n()`.
+
+```{r}
+jfk_flights |> 
+  group_by(carrier) |> 
+  summarize(prop_late = mean(departed_late),
+            flights = n()) |> 
+  arrange(desc(prop_late)) 
+```
+
+## Putting the pieces together
+
+We can combine things in more complicated ways depending on the question we have. Let's say we want to know how airlines differ in their average delay when a plane is late.
+
+One other thing: we don't have to just look at these results in the console. We can save the resulting data as a new tibble (i.e., data frame).
+
+```{r}
+late_data <- jfk_flights |>
+  filter(dep_delay > 0) |> 
+  group_by(carrier) |> 
+  summarize(avg_delay = mean(dep_delay),
+            flights = n()) |> 
+  arrange(desc(avg_delay))
+
+late_data
+```
+
+Now we could continue to do other things to this new tibble. For example, we could filter out airlines with less than 1000 delayed flights.
+
+```{r}
+late_data |> 
+  filter(flights > 1000)
+```
+
+We could also pipe a tibble right into a call to `ggplot()`. Let's say we wanted a bar plot where the height of the bar is the average delay.
+
+```{r}
+#| error: TRUE
+
+late_data |> 
+  filter(flights > 1000) |> 
+  ggplot(aes(x = carrier,
+             y = avg_delay)) +
+  geom_bar()
+```
+
+This doesn't work because `geom_bar()`'s default behavior is to make a *count* of the items the y-axis. The error we got tells us something about what's happening.
+
+If we want to override this behavior (which we do in this case) we have to add `stat = "identity"` inside the `geom_bar()` function. This means "just use the y-axis I told you to use; don't try to calculate your own."
+
+```{r}
+late_data |> 
+  filter(flights > 1000) |> 
+  ggplot(aes(x = carrier,
+             y = avg_delay)) +
+  geom_bar(stat = "identity")
+```
+
+We might want to do several things to make this look better. For example, we could reorder the carriers in order of average lateness.
+
+```{r}
+late_data |> 
+  filter(flights > 1000) |> 
+  ggplot(aes(x = reorder(carrier, avg_delay),
+             y = avg_delay)) +
+  geom_bar(stat = "identity")
+```
+
+Maybe we want them ordered from highest to lowest and maybe we want a nicer axis titles. We could also add a note.
+
+```{r}
+late_data |> 
+  filter(flights > 1000) |> 
+  ggplot(aes(x = reorder(carrier, desc(avg_delay)),
+             y = avg_delay)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Carrier",
+       y = "Average delay (mins)",
+       caption = "Delayed flights only",
+       title = "Flight delay by carrier",
+       subtitle = "All flights departing JFK, 2013")
+```
