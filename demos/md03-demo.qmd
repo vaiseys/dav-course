@@ -217,3 +217,32 @@ late_data |>
        title = "Flight delay by carrier",
        subtitle = "All flights departing JFK, 2013")
 ```
+
+## A few extra things for the homework
+
+### Standard deviation
+
+The homework is going to ask you for the "standard deviation" of some values. Let's see how to do that with `air_time`.
+
+```{r}
+jfk_flights |> 
+  group_by(carrier) |> 
+  summarize(mean_delay = mean(air_time),
+            sd_delay = sd(air_time))
+```
+
+Let's look at this.
+
+```{r}
+ggplot(jfk_flights,
+       aes(x = air_time)) +
+  geom_histogram(color = "white",
+                 boundary = 60,
+                 binwidth = 60) +
+  facet_wrap(~carrier,
+             scales = "free_y")
+```
+
+### Grouping by multiple things
+
+### Joining
