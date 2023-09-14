@@ -115,7 +115,7 @@ Here's how you can read it in.
 drivers <- read_csv("https://raw.githubusercontent.com/NicolasRestrep/223_course/main/Data/drivers.csv")
 ```
 
-Now use `left_join` to join `three_laps` and `drivers` together. 
+Now use `left_join` to join `three_laps` and `drivers` together. Note: the joined dataset should have the same number of observations as `three_laps` (i.e., you have to limit the `drivers` dataset to one observation per player before using `left_join`).
 
 Now, plot a bar chart for how many records each country has. 
 
