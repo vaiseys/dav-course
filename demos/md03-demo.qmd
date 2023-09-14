@@ -227,8 +227,8 @@ The homework is going to ask you for the "standard deviation" of some values. Le
 ```{r}
 jfk_flights |> 
   group_by(carrier) |> 
-  summarize(mean_delay = mean(air_time),
-            sd_delay = sd(air_time))
+  summarize(mean_airtime = mean(air_time),
+            sd_airtime = sd(air_time))
 ```
 
 Let's look at this.
@@ -245,4 +245,17 @@ ggplot(jfk_flights,
 
 ### Grouping by multiple things
 
+Group by two things
+
+```{r}
+jfk_flights |> 
+  group_by(carrier, dest) |> 
+  summarize(num_flights = n())
+```
+
 ### Joining
+
+```{r}
+joined_jfk <- left_join(jfk_flights,
+                        airlines)
+```
