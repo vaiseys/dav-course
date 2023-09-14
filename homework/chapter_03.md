@@ -96,7 +96,7 @@ three_laps %>%
 
 Now, it's your turn to show me the best time recorded on each track
 
-The result you get using `group_by` and `arrange` contains a lot of information. So let's use `select` so that your out displays only the name of the track and the lowest time recorded there. 
+The result you get using `group_by` and `arrange` contains a lot of information. So let's use `select` so that your output displays only the name of the track and the lowest time recorded there. 
 
 ## Question 6 
 
