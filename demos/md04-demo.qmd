@@ -3,6 +3,8 @@ title: "MD 4 Demo"
 format: html
 embed-resources: true
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 The `tidyverse` package is an umbrella package that includes `dplyr`, `ggplot`, `readr`, and a couple of others. We've been using it all along.
@@ -70,8 +72,8 @@ We need to make the data frame "longer" so that each row is one observation. We 
 ```{r}
 drinks_smaller_tidy <- drinks_smaller |> 
   pivot_longer(cols = c(beer, spirit, wine),  # which cols?
-               names_to = "type",       # what to call names?
-               values_to = "servings")    # what to call values?
+               names_to = "type",             # what to call names?
+               values_to = "servings")        # what to call values?
 drinks_smaller_tidy
 ```
 
