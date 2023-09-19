@@ -13,7 +13,7 @@ library(tidyverse)
 
 We have done this a couple of times but I want to reinforce how handy of a trick this is. It turns out you can read in data directly from the internet. 
 
-Go to this [link](https://github.com/NicolasRestrep/223_course/blob/main/Data/nfl_salaries.csv). Yes, I recognize that this is the course repository. Yes, I recognize you also have this data because you cloned into the repository. But this is useful I promise. 
+Go to this [link](https://github.com/vaiseys/dav-course/blob/main/Data/nfl_salaries.csv). Yes, I recognize that this is the course repository. Yes, I recognize you also have this data because you cloned into the repository. But this is useful I promise. 
 
 Then, click on a button that says `Raw`. Once you see the the raw data, copy the link. Now, use `read_csv` but pass the link (inside quotation marks) as an argument.
 
