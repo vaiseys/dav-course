@@ -1,0 +1,225 @@
+---
+title: "MD 4 Demo"
+format: html
+embed-resources: true
+editor: visual
+---
+
+The `tidyverse` package is an umbrella package that includes `dplyr`, `ggplot`, `readr`, and a couple of others. We've been using it all along.
+
+```{r}
+#| message: false
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+BTW, `#| message: false` in the code block above means your Quarto files won't have all the `tidyverse` loading messages in them. **You should do this from now on!**
+
+(For those of you who are using R Markdown instead of Quarto, instead of adding the `#|` tag, you should change the first line to read `{r, message = FALSE}`.)
+
+## Importing data
+
+If we want a dataset from outside R, we need to go get it, either off the internet or off our hard drive. You did the internet already in your last homework but you were told how to do it. Let's look in more detail.
+
+First go to [this link](https://github.com/vaiseys/dav-course/blob/main/Data/world_records.csv). Then click "Raw". You will see that this is just text. A lot of data is stored like this. This is called a "comma delimited file."
+
+You can read it in using the `read_csv()` function from `readr`, which is part of the `tidyverse`.
+
+```{r}
+mc_world_records <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/world_records.csv")
+```
+
+Now go back and click the little icon (near "Raw") that says "Download raw file." You can also read that into R by using `read_csv()` and pointing in to the location on your hard drive.
+
+## "Tidy" data
+
+Using the tidyverse, as we are, a good heuristic is to make our data as LONG as possible. In general, we are looking for:
+
+1.  Each variable is a column
+2.  Each observation is a row
+3.  Each type of observational unit forms a table
+
+This last one really means that you need to think "what are my observations"? And **this can differ from question to question** (which is why research questions matter!).
+
+Here's the book example. **You will need to install the `fivethirtyeight` package for this code to work!**
+
+```{r}
+library(fivethirtyeight)
+```
+
+We are going to make the same little `drinks_smaller` data frame from the MD book.
+
+```{r}
+drinks_smaller <- 
+  drinks |> 
+  filter(country %in% c("USA", "China", "Italy", "Saudi Arabia")) |> 
+  select(-total_litres_of_pure_alcohol) |> 
+  rename(beer = "beer_servings",
+         spirit = "spirit_servings",
+         wine = "wine_servings")
+drinks_smaller
+  
+```
+
+How would we make this graph?
+
+![](images/drinks-smaller-1.png){fig-align="center"}
+
+We need to make the data frame "longer" so that each row is one observation. We can use the `pivot_longer()` function for that.
+
+```{r}
+drinks_smaller_tidy <- drinks_smaller |> 
+  pivot_longer(cols = c(beer, spirit, wine),  # which cols?
+               names_to = "type",       # what to call names?
+               values_to = "servings")    # what to call values?
+drinks_smaller_tidy
+```
+
+Now we can make the graph:
+
+```{r}
+ggplot(drinks_smaller_tidy,
+       aes(x = country,
+           y = servings,
+           fill = type)) +
+  geom_col(position = "dodge")  # geom_col is geom_bar with stat = "identity"
+```
+
+Now I'm going to deviate from the book to show you a situation where what counts as the observation depends on the research question.
+
+Let's bring in some women's soccer data. **You will need to install `worldfootballR` for this to work!**
+
+```{r}
+library(worldfootballR)
+```
+
+```{r}
+#| cache: true
+nwsl <- fb_match_results(
+  country = "USA",
+  gender = "F",
+  season_end_year = c(2021,2022,2023) # since covid
+)  
+```
+
+If you are downloading data from elsewhere, it can be useful to add `#| cache: true`. This will save a local copy of the data and will not change it unless you modify the code in the block. This is really helpful to avoid getting blocked!
+
+(If for some reason this doesn't work, I have saved a copy in the repo under `Data/nwsl.Rdata`, which you could load as follows.)
+
+```{r}
+#| eval: false
+load("Data/nwsl.Rdata")
+```
+
+For this exercise, we only need a few columns. So let's use `select()`. There are also just a few games without results, so we will use `drop_na()` to get rid of those.
+
+```{r}
+nwsl_results <- nwsl |> 
+  select(Home,
+         HomeGoals,
+         Away,
+         AwayGoals) |>
+  drop_na() |> 
+  as_tibble()               # makes the display nicer
+nwsl_results
+```
+
+Each observation here is a single game. This makes sense and might even be tidy for some applications. For example, if I wanted to know how many home goals the NC Courage scored over these three seasons, I could do the following:
+
+```{r}
+nwsl_results |>
+  filter(Home == "Courage") |> 
+  summarise(goals = sum(HomeGoals))
+```
+
+But if I wanted to ask questions like "how many goals did every team score over these three seasons?" it would be harder.
+
+We could reshape the data so each is listed *twice*, once as the "focal" team and once as the "opponent". This would make many calculations much easier even though it's now a larger data frame.
+
+```{r}
+home_results <- nwsl_results |> 
+  rename("team" = "Home",
+         "opponent" = "Away",
+         "scored" = "HomeGoals",
+         "conceded" = "AwayGoals") |> 
+  mutate(venue = "Home")
+
+away_results <- nwsl_results |> 
+  rename("team" = "Away",
+         "opponent" = "Home",
+         "scored" = "AwayGoals",
+         "conceded" = "HomeGoals") |> 
+  mutate(venue = "Away")
+
+long_results <- bind_rows(home_results, away_results)
+head(long_results, n = 20)
+```
+
+This code uses `bind_rows()` which sticks two data frames on top of each other, lining them up according to their column (i.e., variable) names.
+
+With the data in this form, we could easily calculate now a "points" variable that recorded the number of points earned by the result.
+
+```{r}
+long_results <- long_results |> 
+  mutate(points = case_when(scored > conceded ~ 3L,
+                            scored < conceded ~ 0L,
+                            scored == conceded ~ 1L))
+
+head(long_results)
+```
+
+Now calculating the best team over the three seasons would be super easy.
+
+```{r}
+long_results |> 
+  group_by(team) |> 
+  summarize(ppg = mean(points)) |> 
+  ggplot(aes(x = reorder(team, ppg),
+             y = ppg)) +
+  geom_col() +
+  theme(legend.position = "none") +
+  guides(x = guide_axis(angle = 90)) +
+  labs(x = "",
+       y = "PPG",
+       title = "Points per game in the NWSL, 2021-2023")
+```
+
+BTW, `geom_col()` is the same as `geom_bar(stat = "identity")` that I showed you before.
+
+Or we could do:
+
+```{r}
+long_results |> 
+  group_by(team) |> 
+  summarize(scored = mean(scored),
+            conceded = mean(conceded)) |> 
+  ggplot(aes(x = scored,
+             y = conceded,
+             label = team)) +
+  geom_text() +
+  geom_abline(intercept = 0,
+              slope = 1,
+              linetype = "dashed",
+              alpha = .5)
+```
+
+A nicer version would use `geom_text_repel()`, **which would require you to install `ggrepel`**. This makes sure the labels of the points don't overlap.
+
+```{r}
+library(ggrepel)
+
+long_results |> 
+  group_by(team) |> 
+  summarize(scored = mean(scored),
+            conceded = mean(conceded)) |> 
+  ggplot(aes(x = scored,
+             y = conceded,
+             label = team)) +
+  geom_point(alpha = .3) +
+  geom_text_repel() +
+  geom_abline(intercept = 0,
+              slope = 1,
+              linetype = "dashed",
+              alpha = .5) +
+  theme(aspect.ratio = 1)
+```
