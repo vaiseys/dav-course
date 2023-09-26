@@ -11,7 +11,7 @@ Let's do a quick exercise. We are going to examine the relationship between two 
 ```r
 library(tidyverse)
 # Read in the data 
-exercise_data <- read_csv("../Data/visualize_data.csv")
+exercise_data <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/visualize_data.csv")
 glimpse(exercise_data)
 ```
 
