@@ -1,0 +1,265 @@
+---
+title: "DV 3 demo"
+output: html_document
+embed-resources: true
+date: "`r Sys.Date()`"
+---
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(ggthemes)              # additional ggplot themes
+library(ggrepel)               # for additional plot labeling
+theme_set(theme_pander())      # set your default theme for this session
+```
+
+## An orienting example
+
+```{r}
+library(gapminder)
+data(gapminder)
+```
+
+We'll just keep the most recent data in this dataset (2007).
+
+```{r}
+gm2007 <- gapminder |> 
+  filter(year == 2007)
+```
+
+```{r}
+ggplot(gm2007,
+            aes(x = gdpPercap,
+                y = lifeExp)) +
+  geom_point(alpha = .2)
+```
+
+What is the correlation? Why might correlation not be the best number to work with here?
+
+```{r}
+gm2007 |> 
+  select(gdpPercap, lifeExp) |> 
+  cor()
+```
+
+## What **is** correlation?
+
+Let's start with a few ideas.
+
+### mean
+
+The mean is the most common measure of the "average" value.
+
+$$\bar{x} = \frac{\sum x_i}{n}$$ Let's check the mean value of life expectancy in these data.
+
+```{r}
+mean(gm2007$lifeExp)
+```
+
+### standard deviation
+
+The **standard deviation** is a measure of how spread out the data are.
+
+$$SD_x = \sqrt{\frac{\sum (x_i - \bar{x})^2}{n-1}} $$ First let's look at this visually.
+
+```{r}
+ggplot(gm2007,
+       aes(x = lifeExp)) +
+  geom_histogram(binwidth = 2,
+                 color = "white")
+```
+
+ASIDE: if you're looking to get a good baseline for breaks, try this.
+
+```{r}
+breaks <- pretty(
+  gm2007$lifeExp,                   # give it the variable
+  nclass.Sturges(gm2007$lifeExp))   # ask "Sturges" to tell you how many bins
+
+breaks
+```
+
+```{r}
+ggplot(gm2007,
+       aes(x = lifeExp)) +
+  geom_histogram(breaks = breaks,
+                 color = "white") +
+  geom_vline(xintercept = mean(gm2007$lifeExp),
+             color = "red",
+             linetype = "dashed")
+```
+
+What is the standard deviation here?
+
+```{r}
+sd(gm2007$lifeExp)
+```
+
+**The "empirical" rule**: if you can't visualize the data for some reason, it's a reasonable approximation to estimate that 68% of the data lie within 1 SD of the mean and 95% lie within 2 SDs of the mean. This works better the more "bell shaped" (i.e., "normal") your data are. So it probably wouldn't work great here!
+
+### standardized variable
+
+Variables are measured in units like dollars or years. If we want a "unitless" measure of something, we can *standardize* a variable. Let's call that variable $x^*$.
+
+$$x^*_i = \frac{x_i-\bar{x}}{SD_x}$$ The unit now is "how many standard deviations from the mean is this observation"?
+
+### correlation
+
+To calculate the correlation between two variables, we need both variables standardized. Then apply this formula:
+
+$$r_{xy} = \frac{\sum x^*_i y^*_i}{n} $$ The idea here is when one variable is 1 standard deviation higher, the other variable will be $r_{xy}$ standard deviations higher.
+
+Let's check this out.
+
+```{r}
+# get means and SDs
+mean_gdp <- mean(gm2007$gdpPercap)
+sd_gdp <- sd(gm2007$gdpPercap)
+mean_lexp <- mean(gm2007$lifeExp)
+sd_lexp <- sd(gm2007$lifeExp)
+
+# make new standardized variables
+gm2007 <- gm2007 |> 
+  mutate(z_gdp = (gdpPercap - mean_gdp) / sd_gdp,
+         z_lexp = (lifeExp - mean_lexp) / sd_lexp)
+```
+
+```{r}
+ggplot(gm2007,
+       aes(x = z_gdp,
+           y = z_lexp)) +
+  geom_point(alpha = .3) +
+  geom_vline(xintercept = 0,
+             linetype = "dashed",
+             color = "red") +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "red")
+
+```
+
+Points in the bottom left and top right quadrants will increase the correlation value; points in the other quadrants will decrease it.
+
+### a note on the problem
+
+Correlation is based on the idea of ***linear*** relationships. This relationship isn't very linear, perhaps due to the diminishing returns of the economy to life expectancy.
+
+What if we used the base 2 log of GDP instead?
+
+```{r}
+gm2007 <- gm2007 |> 
+  mutate(log2gdp = log2(gdpPercap))
+```
+
+```{r}
+ggplot(gm2007,
+       aes(x = log2gdp,
+           y = lifeExp)) +
+  geom_point(alpha = .3)
+```
+
+```{r}
+gm2007 |> 
+  select(log2gdp,
+         lifeExp) |> 
+  cor()
+```
+
+## Why we plot
+
+```{r}
+data(anscombe)
+anscombe
+```
+
+Since we're using dplyr, let's get this long rather than wide.
+
+```{r}
+anscombe_long <- anscombe %>%
+  pivot_longer(
+    everything(),
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)"
+  ) |> 
+  arrange(set)
+
+anscombe_long
+```
+
+Now let's compute the mean and SD for each set of X and Y.
+
+```{r}
+anscombe_long |> 
+  group_by(set) |> 
+  summarize(
+    across(.cols = c(x, y), 
+           .fns = list(mean = mean, sd = sd), 
+           .names = "{col}_{fn}"))
+```
+
+They look the same, but these sorts of numbers can be deceiving!
+
+Now let's plot the scatter plots of each of the four sets.
+
+```{r}
+ggplot(anscombe_long,
+       aes(x = x,
+           y = y)) +
+  geom_point(alpha = .5) +
+  facet_wrap(~set)
+```
+
+Without looking at the data, this would be **very** hard to notice!
+
+
+## A football (soccer) example
+
+```{r}
+#| cache: true
+
+library(worldfootballR)
+d <- fb_match_results(country = "ENG",
+                      gender = "M",
+                      season_end_year = 2022)
+```
+
+How well does xG track with actual goals?
+
+Again, we don't want HomeGoals/AwayGoals and Home_xG and Away_xG in different columns. We don't care about game results here, so let's get a structure where all the goals are in one column and all the xgs are in another.
+
+```{r}
+d2 <- d |>
+  mutate(matchid = 1:nrow(d)) |> 
+  select(matchid, Home, Away, HomeGoals, AwayGoals, Home_xG, Away_xG) |>
+  rename(team1 = Home,
+         team2 = Away,
+         xg1 = Home_xG,
+         xg2 = Away_xG,
+         goals1 = HomeGoals,
+         goals2 = AwayGoals) |>
+  pivot_longer(
+    cols = c(-matchid),
+    names_pattern = "(.+)([12])",
+    names_to = c(".value", "home_away"),
+    values_to = c("team", "goals", "xg"))
+```
+
+What's the correlation between xG and goals?
+
+```{r}
+cor(d2$goals,
+    d2$xg)
+```
+
+Plot it!
+
+```{r}
+ggplot(d2,
+       aes(x = xg,
+           y = goals)) +
+  geom_jitter(alpha = .3) +
+  geom_smooth(method = "lm",
+              se = FALSE,
+              linetype = "dashed")
+```
