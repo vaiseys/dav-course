@@ -1,0 +1,109 @@
+---
+title: "DV 4 Demo"
+format: html
+editor: visual
+embed-resources: true
+---
+
+```{r}
+#| message: false
+library(tidyverse)
+library(patchwork)
+theme_set(theme_light())
+```
+
+Let's bring in the data for the DV chapter 4 homework.
+
+```{r}
+# Read in the data 
+tv_ratings <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/tv_ratings.csv")
+
+# Glimpse the data 
+glimpse(tv_ratings)
+```
+
+Different ways of visualizing distributions.
+
+```{r}
+p1 <- ggplot(tv_ratings,
+             aes(x = av_rating)) +
+  geom_histogram(color = "white",
+                 binwidth = .5,
+                 boundary = 7)
+
+p2 <- ggplot(tv_ratings,
+             aes(x = av_rating)) +
+  geom_freqpoly(binwidth = .5,
+                boundary = 7)
+
+p3 <- ggplot(tv_ratings,
+             aes(x = av_rating)) +
+  geom_density()
+
+p1 / p2 / p3
+
+p1 + p2 + p3
+```
+
+Comparing distributions
+
+```{r}
+tv_ratings_2seasons <- tv_ratings |> 
+  group_by(title) |> 
+  mutate(maxseason = max(seasonNumber)) |> 
+  filter(maxseason >= 2) |> 
+  filter(seasonNumber <= 2) |> 
+  mutate(season = factor(seasonNumber,
+                         levels = c(1, 2),
+                         labels = c("First", "Second")))
+
+
+c1 <- ggplot(tv_ratings_2seasons,
+             aes(x = av_rating,
+                 group = season,
+                 fill = season)) +
+  geom_histogram(color = "white",
+                 binwidth = .5,
+                 boundary = 7)
+
+c2 <- ggplot(tv_ratings_2seasons,
+             aes(x = av_rating,
+                 group = season,
+                 color = season)) +
+  geom_freqpoly(binwidth = .5,
+                boundary = 7)
+
+c3 <- ggplot(tv_ratings_2seasons,
+             aes(x = av_rating,
+                 group = season,
+                 color = season))+
+  geom_density()
+
+c1 / c2 / c3
+```
+
+There are alternatives for two-dimensional plots as well.
+
+```{r}
+library(worldfootballR)
+
+epl <- fb_match_results(
+  country = "ENG",
+  gender = "M",
+  season_end_year = 2018:2023 
+)  
+```
+
+```{r}
+s1 <- ggplot(epl,
+             aes(x = Home_xG,
+                 y = Away_xG)) +
+  geom_jitter(alpha = .2)
+
+s2 <-  ggplot(epl,
+              aes(x = Home_xG,
+                  y = Away_xG)) +
+  geom_bin_2d(binwidth = c(.5, .5))
+
+s1 + s2
+```
