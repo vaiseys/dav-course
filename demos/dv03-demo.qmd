@@ -212,7 +212,6 @@ ggplot(anscombe_long,
 
 Without looking at the data, this would be **very** hard to notice!
 
-
 ## A football (soccer) example
 
 ```{r}
