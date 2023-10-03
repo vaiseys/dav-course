@@ -11,7 +11,7 @@ We are going to work with a dataset of TV Ratings taken from IMDB. Let's read it
 library(tidyverse)
 
 # Read in the data 
-tv_ratings <- read_csv("../Data/tv_ratings.csv")
+tv_ratings <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/tv_ratings.csv")
 
 # Glimpse the data 
 glimpse(tv_ratings)

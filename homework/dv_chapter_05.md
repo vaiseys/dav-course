@@ -1,14 +1,4 @@
----
-title: "Chapter 5"
-author: "Nicolas Restrepo"
-output: 
-  html_document: 
-    toc: true
-    theme: united
-    keep_md: true
----
-
-
+# Chapter 5 - Data Visualization
 
 Here, we are going to practice some of the skills emphasized in Chapter 5. At first, it may seem that a lot of the skills are similar to those we learned in Modern Dive. I have two responses to that. First, you are right; repetition is important. That's how we learn things. Second, this chapter presents some incredibly handy tricks that as a Data Analyst you will use all the time. In these exercises, we are going to be using data from the WNCAA tournament. 
 
@@ -18,7 +8,7 @@ As always, let's begin by reading in the data.
 ```r
 library(tidyverse)
 # Read in the data 
-wncaa <- read_csv("../Data/wncaa.csv")
+wncaa <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/wncaa.csv")
 
 # Glimpse the data 
 glimpse(wncaa)
