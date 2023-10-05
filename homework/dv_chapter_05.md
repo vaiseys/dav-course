@@ -56,7 +56,7 @@ Now, use `group_by` and `summarize` to calculate the percentage of tournaments e
 
 Plot a bar plot that shows these percentages by school. 
 
-What trends do you see? Who are the two teams that have won the most?
+What patterns do you see? Who are the two teams that have won the most?
 
 ## Question 2 
 
@@ -79,33 +79,40 @@ winners <- wncaa %>%
 
 Now, make a plot that shows boxplots for the distribution of `seeds` for each school. Make sure you use `coord_flip()` so that the school names are legible. 
 
-But here we probably want to organize the boxplots so that they convey information more clearly. Use the `reorder()` trick that the book introduces to show the distributions in a more legible order. 
+These days, it's good practice to add all the data points in addition to the boxplot. You can use `geom_jitter()` to do this. Don't forget to use `outlier.shape = NA` in the boxplot so you don't plot the outliers twice. 
+
+We will also want to organize the plots so that they convey information more clearly. Use the `reorder()` trick to show the distributions in a an  order that is easier to understand. You will need to calculate some school-specific statistics to use for the reordering. (You might find `group_by()` and `mutate()` valuable here, although there are several ways to do this.)
 
 Describe the results? Any surprises? 
 
-Try to make the same plot using `geom_violin()` instead of boxplots. 
-
-Which one do you think is more informative? 
+Try to make the same plot using `geom_violin()` instead of `geom_boxplot()`. Which visualization do you think is more informative? There's no right answer here but provide some reasoning to justify your choice.
 
 ## Question 3 
 
-Try making the plot above but using `geom_point`. Why does it not work very well? 
+Try making the plot above but using `geom_point` only. Why does it not work very well? 
 
 ## Question 4 
 
-Okay, now let's try the `summarize_if` verb. Let's take the `winners` dataset, group by school, and take the `mean()` and `sd()` of the columns **if** they are numeric. 
+Okay, now let's try the `summarize_if()` verb. Let's make a new data frame by taking the `winners` dataset, grouping by school, and take the `mean()` and `sd()` of the columns **if** they are numeric. HINT: you can also use the newer `across()` syntax for this if you prefer. It looks like this:
 
-Let's explore the average win percentage of these schools across the seasons. In your new dataset, this column should be called `reg_percent_mean`. Make a dot plot, where this column is in the y-axis and school is the x-axis. Again, use our tricks, `coord_flip` and `reorder` to make the plot legible.
+```
+winners_mean_sd <- winners |> 
+  group_by(school) |> 
+  summarize(across(is.numeric,
+                   list(mean = mean,
+                        sd = sd)))
+```
 
 
+Let's explore the average win percentage of these schools across the seasons. In your new dataset, this column should be called `reg_percent_mean`. Make a dot plot, where this column is in the y-axis and school is the x-axis. Again, use our tricks, `coord_flip` and `reorder` to make the plot legible. (Or you can specify the proper axes from the start if you like. Sometimes this is easier, but not always!)
 
-Describe the results. 
+Describe the results. Which tournament winner had the lowest regular season win percentage?
 
-Now, let's try to take into account the standard deviation. Use the `geom_pointrange` to show the intervals of one standard deviation below and above the mean (just like in the chapter).
+Now, let's try to take into account the standard deviation. Use the `geom_pointrange` to show the intervals of one standard deviation below and above the mean (just like Figure 5.15 in the online version of socviz.co).
 
-What is the school with the most narrow interval? 
+What is the school with the narrowest interval? What does this mean?
 
-Can you make the same plot using `geom_linerange` ? 
+Can you make the same plot using `geom_linerange` ? Do you think this is a good or bad idea? Why? There is no right answer; just give your reasoning.
 
 ## Question 5 
 
