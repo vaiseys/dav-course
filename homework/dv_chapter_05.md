@@ -98,7 +98,7 @@ Okay, now let's try the `summarize_if()` verb. Let's make a new data frame by ta
 ```
 winners_mean_sd <- winners |> 
   group_by(school) |> 
-  summarize(across(is.numeric,
+  summarize(across(where(is.numeric),
                    list(mean = mean,
                         sd = sd)))
 ```
@@ -113,58 +113,3 @@ Now, let's try to take into account the standard deviation. Use the `geom_pointr
 What is the school with the narrowest interval? What does this mean?
 
 Can you make the same plot using `geom_linerange` ? Do you think this is a good or bad idea? Why? There is no right answer; just give your reasoning.
-
-## Question 5 
-
-It would be interesting to explore how your performance in the regular season is related to full performance, after the tournament is done. Let's take our `winners` dataframe and plot these two variables in a scatterplot where `reg_percent` is in the x-axis and `full_percent` is in the y-axis. 
-
-Add `geom_abline()` to your call. Without arguments, this just plots a 45 degree line. You can think about this line as performance in regular season perfectly predicting the full performance. Now, this is almost impossible, as most teams will take losses in the tournament. This is why we expect most points to be below this line. The points are above this line represent teams whose overall performance improved after the tournament - they did better than we would have expected given the regular season. 
-
-What patterns do you see? 
-
-## Question 6 
-
-Let's see how champions are reflected in this plot. Let's make a variable what is a 1 if that team ended up winning the tournament or a 0 otherwise. 
-
-
-```r
-winners <- winners %>% 
-  mutate(is_champ = if_else(tourney_finish == "Champ", 1, 0), 
-         is_champ = as.factor(is_champ))
-```
-
-Now, color the plot above according to our newly created variable. 
-
-> Why did I make `is_champ` a factor? Try the plot without making that variable a factor. What changes? 
-
-Do you see any patterns? Do they make sense to you? 
-
-## Question 7 
-
-There are two points that really stick out to me. All the way to the left of the x-axis, there is a team that made it to the tournament in spite of having a really bad regular season record. And around the 70% in the x-axis, there is a team that over-performed in the tournament. I want you to label these points. 
-
-But I am not only interested in the school but also in the year this happened. Let's combine the variables for school and year to create our labels. 
-
-
-```r
-winners <- winners %>% 
-  mutate(plot_label = paste(school, year, sep = "-"))
-```
-
-Let's also create a variable for the difference between full performance and regular season performance. 
-
-
-```r
-winners <- winners %>% 
-  mutate(difference = full_percent - reg_percent) 
-```
-
-Now, it's up to you to label the points of interest. 
-
-Do you see anything interesting? I'll give you a hint: the school that has overperformed the most has been the same one, one decade apart. 
-
-## Question 8 
-
-There's a few teams that have gone unbeaten. This means 100% performance in the regular and full seasons. Tell me what teams they are. 
-
-Any patterns? Surprises? 
