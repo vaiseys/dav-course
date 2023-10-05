@@ -1,0 +1,127 @@
+---
+title: "DV 5 Demo"
+format: html
+editor: visual
+embed-resources: true
+---
+
+```{r}
+#| message: false
+library(tidyverse)
+library(nycflights13)
+theme_set(theme_light())
+```
+
+## tricks for DV 5
+
+I'm going to show you some tricks that will make this homework much easier.
+
+Let's start with all flights in January from LaGuardia.
+
+```{r}
+data("flights")
+
+flights_jan_lga <- flights |> 
+  filter(month == 1 & origin == "LGA")
+
+glimpse(flights_jan_lga)
+```
+
+### mutating by group
+
+You know how to do this:
+
+```{r}
+flights_jan_lga |>
+  group_by(carrier) |> 
+  summarize(avg_flight = mean(air_time, na.rm = TRUE))
+```
+
+But what if you don't want to collapse the dataset down? What if, for example, I want to do make a plot like this? I don't want it alphabetical. How would I sort it?
+
+```{r}
+flights_jan_lga |> 
+  ggplot(aes(x = carrier,
+             y = air_time)) +
+  geom_jitter(alpha = .1) +
+  coord_flip()
+```
+
+Two ways, both use `mutate()` to create a new column (variable) without changing the number of rows.
+
+First, using `group_by()` then `ungroup()`.
+
+```{r}
+flights_jan_lga <- flights_jan_lga |> 
+  group_by(carrier) |> 
+  mutate(mean_air_time = mean(air_time, na.rm = TRUE)) |> 
+  ungroup()
+```
+
+This adds the `mean_air_time` to the whole dataframe.
+
+```{r}
+flights_jan_lga |> 
+  select(carrier, flight, dest, air_time, mean_air_time ) |> 
+  head(n = 12)
+```
+
+Or you could do it this slightly newer way, which just uses a grouping temporarily.
+
+```{r}
+flights_jan_lga <- flights_jan_lga |> 
+  mutate(mean_air_time2 = mean(air_time, na.rm = TRUE),
+         .by = carrier)
+```
+
+This will look the same as above.
+
+```{r}
+flights_jan_lga |> 
+  select(carrier, flight, dest, air_time, mean_air_time, mean_air_time2 ) |> 
+  head(n = 12)
+```
+
+Now we can do this:
+
+```{r}
+flights_jan_lga |> 
+  ggplot(aes(x = reorder(carrier,
+                         mean_air_time),
+             y = air_time)) +
+  geom_jitter(alpha = .1) +
+  labs(x = "Carrier",
+       y = "Air time (minutes)",
+       caption = "All January 2013 flights from LGA") +
+  coord_flip()
+```
+
+### across()
+
+Let's say we wanted some summary information on delays and travel time. We want both the mean and the standard deviation.
+
+```{r}
+fjl_summary <- flights_jan_lga |>
+  group_by(carrier) |> 
+  drop_na(air_time, dep_delay) |> 
+  summarize(air_time_mean = mean(air_time),
+            air_time_sd = sd(air_time),
+            dep_delay_mean = mean(dep_delay),
+            dep_delay_sd = sd(dep_delay))
+
+fjl_summary
+```
+
+There's an easier way than all this typing!
+
+```{r}
+fjl_summary2 <- flights_jan_lga |> 
+  group_by(carrier) |> 
+  drop_na(air_time, dep_delay) |> 
+  summarize(across(c(air_time,
+                     dep_delay),
+                   .fns = list(mean = mean,
+                               sd = sd)))
+
+fjl_summary2
+```
