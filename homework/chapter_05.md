@@ -1,14 +1,4 @@
----
-title: "Chapter 5 - Modern Dive"
-author: "Nicolas Restrepo"
-output: 
-  html_document: 
-    toc: true
-    theme: united
-    keep_md: true
----
-
-
+# Chapter 5 - Modern Dive
 
 We are getting into more complex topics, like how to fit and interpret models. In this section, we will use all the tools we have learned - from wrangling to visualization - to make sure we fit appropriate models and that we understand what these models are doing. Models can be powerful inferential tools but they can also be misleading (like anything). It is important that we know what is powering the machinery we are using so that we always know whether to trust the results we get. 
 
@@ -20,7 +10,7 @@ Let's begin by loading the data in our usual way.
 ```r
 library(tidyverse)
 
-twitch_data <- read_csv("../Data/twitchdata-update.csv")
+twitch_data <- read_csv("https://github.com/vaiseys/dav-course/blob/main/Data/twitchdata-update.csv")
 ```
 
 The names of th variables here are a bit annoying. They are capitalized and have spaces which makes them awkward to work with in R. Let me show you a neat trick. First, install a package called `janitor` if you don't have it yet. Then, let's load it and clean the names. 

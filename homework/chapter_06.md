@@ -10,7 +10,7 @@ library(tidyverse)
 # Set our ggplot theme from the outset
 theme_set(theme_light())
 # Read in the data 
-gender_employment <- read_csv("../Data/gender_employment.csv")
+gender_employment <- read_csv("https://github.com/vaiseys/dav-course/blob/main/Data/gender_employment.csv")
 
 # Glimpse at the data 
 glimpse(gender_employment)
