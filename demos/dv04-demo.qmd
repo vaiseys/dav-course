@@ -33,7 +33,7 @@ p1 <- ggplot(tv_ratings,
 
 p2 <- ggplot(tv_ratings,
              aes(x = av_rating)) +
-  geom_freqpoly(binwidth = .5,
+  geom_freqpoly(binwidth = 1,
                 boundary = 7)
 
 p3 <- ggplot(tv_ratings,

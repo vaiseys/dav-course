@@ -2,6 +2,8 @@
 title: "MD05 Demo"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 Load packages and set theme.
@@ -10,7 +12,6 @@ Load packages and set theme.
 #| message: false
 library(tidyverse)
 library(moderndive)
-library(ggthemes)
 library(patchwork)
 theme_set(theme_light())
 ```
@@ -22,7 +23,7 @@ data(evals)
 glimpse(evals)
 ```
 
-We are going to ask whether the "beauty" of an instructor predicts their teaching evaluations. 
+We are going to ask whether the "beauty" of an instructor predicts their teaching evaluations.
 
 ```{r}
 d <- evals |>
@@ -155,7 +156,7 @@ In statistics, it's a bit different:
 
 $$
 \hat{y} = \alpha + \beta x
-$$ 
+$$
 
 Why $\hat{y}$ (pronounced "y hat")? Because as you can see, the line doesn't pass through all the points. It's not a *deterministic function* like a line in geometry. It's an *expectation* that *summarizes* the relationship between two variables with a single line that is the best possible fit.
 
@@ -199,12 +200,15 @@ broom::tidy(mod2)     # instead of get_regression_table()
 
 Use the `evals` data to test some ideas of your own. Call the file like this:
 
-```
+```         
 2023-10-10-inclass.qmd
 ```
 
 Commit it to your repo by the end of class.
 
+## Units
+
+\<mtcars demo\>
 
 ## What *is* regression?
 
@@ -253,5 +257,3 @@ $$
 $$
 
 Now any value of $X$ will have its own **conditional mean**.
-
-
