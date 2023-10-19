@@ -1,18 +1,6 @@
----
-title: "Homework 6.2"
-author: "Stephen Vaisey"
-date: "2022-10-27"
-output: 
-  html_document: 
-    toc: true
-    theme: united
-    keep_md: true
----
-
-
+# Homework 6.2
 
 For this assignment you are going to use the `bikes` dataset we began analyzing in class. You can get that dataset from the **bayesrules** package. Once **bayesrules** is installed, you can begin.
-
 
 ```r
 library(tidyverse)
@@ -95,7 +83,7 @@ Using the multiple regression you just estimated, give me ridership predictions 
 * SITUATION 2: temp = 15C, wind = 5 KPH
 * SITUATION 3: temp = 10C, wind = 40 KPH
 
-You can do this manually (using R as a calculator) or you might find the following code useful:
+You can do this manually (using R as a calculator) or you might find the following code useful. I'm not going to give you *all* the code, but this is a head start!
 
 
 ```r
