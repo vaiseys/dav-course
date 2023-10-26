@@ -1,0 +1,107 @@
+---
+title: "MD 06 Debrief"
+format: html
+editor: visual
+---
+
+```{r}
+#| message: false
+library(tidyverse)
+library(moderndive)
+theme_set(theme_light())
+
+```
+
+```{r}
+# Read in the data 
+gender_employment <- read_csv("Data/gender_employment.csv")
+
+gender_employment <- gender_employment %>% 
+  mutate(major_category = as.factor(major_category), 
+         major_category = relevel(major_category, ref = "Management, Business, and Financial"))
+```
+
+```{r}
+ptmodel <- lm(wage_percent_of_male ~ year + major_category,
+              data = gender_employment)
+
+intmodel <- lm(wage_percent_of_male ~ year * major_category,
+              data = gender_employment)
+```
+
+Let's look at the tables. First, the parallel trends.
+
+```{r}
+ptmodel |> 
+  get_regression_table() |> 
+  select(term, estimate)    # just keep what I need
+```
+
+Second, the interaction model.
+
+```{r}
+intmodel |> 
+  get_regression_table() |> 
+  select(term, estimate)    # just keep what I need
+```
+
+What's the best way to get predictions? Not by hand! I wanted you to do that for understanding but here's a better way.
+
+```{r}
+pred_df <- tribble(         # tribble allows easy manual data entry
+  ~year, ~major_category,
+  2016, "Service"
+)
+
+pred_df
+```
+
+You can get predictions on this "new" dataset.
+
+```{r}
+predict(ptmodel,
+        newdata = pred_df)
+```
+
+Better yet, you can add the predictions to the data frame.
+
+```{r}
+pred_df <- pred_df |> 
+  mutate(pt_pred = predict(ptmodel, newdata = pred_df),
+         int_pred = predict(intmodel, newdata = pred_df))
+
+pred_df
+```
+
+You can create more complicated prediction data frames, too.
+
+```{r}
+pred_df2 <- 
+  expand_grid(
+    major_category = c("Service", "Sales and Office"),
+    year = c(2013, 2016)
+  )
+
+pred_df2
+```
+
+Then you get the same procedure
+
+```{r}
+pred_df2 <- pred_df2 |> 
+  mutate(pt_pred = predict(ptmodel, newdata = pred_df2),
+         int_pred = predict(intmodel, newdata = pred_df2))
+
+pred_df2
+```
+
+Then you could plot.
+
+```{r}
+ggplot(pred_df2,
+       aes(x = major_category,
+           y = int_pred,
+           group = factor(year),
+           fill = factor(year))) +
+  geom_col(position = "dodge")
+```
