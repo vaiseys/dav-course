@@ -183,7 +183,6 @@ bikes <- bikes |>
   mutate(weekend = as.factor(weekend))
 ```
 
-
 ```{r}
 model2 <- lm(rides ~ temp_celsius + weekend,
              data = bikes)
@@ -240,7 +239,7 @@ We can get predictions.
 library(ggeffects)
 predictions <- ggpredict(model4,
                          terms = "temp_celsius",
-                         ci = NA) # don't think about confidence intervals yet (soon!)
+                         ci_level = NA) 
 predictions
 ```
 
@@ -318,7 +317,7 @@ get_regression_table(happy3) |>
 ```{r}
 ggpredict(happy3,
           terms = "inc",
-          ci = NA) |> 
+          ci_level = NA) |> 
   plot() +
   scale_x_continuous(breaks = 1:10)
 ```
@@ -337,7 +336,7 @@ What is the effect of each additional year?
 ```{r}
 ggpredict(happy4,
           terms = "age",
-          ci = NA) |> 
+          ci_level = NA) |> 
   plot() +
   scale_x_continuous(breaks = seq(from = 15, 
                                   to = 100,
@@ -356,7 +355,7 @@ get_regression_table(happy5) |>
 ```{r}
 ggpredict(happy5,
           terms = "age",
-          ci = NA) |> 
+          ci_level = NA) |> 
   plot() +
   scale_x_continuous(breaks = seq(from = 15, 
                                   to = 100,

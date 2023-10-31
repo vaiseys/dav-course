@@ -2,20 +2,22 @@
 title: "MD 06 Debrief"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
 #| message: false
 library(tidyverse)
 library(moderndive)
+library(here)
 theme_set(theme_light())
 
 ```
 
 ```{r}
 # Read in the data 
-gender_employment <- read_csv("Data/gender_employment.csv")
-
+gender_employment <- read_csv(here("Data", "gender_employment.csv"))
 gender_employment <- gender_employment %>% 
   mutate(major_category = as.factor(major_category), 
          major_category = relevel(major_category, ref = "Management, Business, and Financial"))
@@ -79,7 +81,7 @@ You can create more complicated prediction data frames, too.
 pred_df2 <- 
   expand_grid(
     major_category = c("Service", "Sales and Office"),
-    year = c(2013, 2016)
+    year = 2013:2016
   )
 
 pred_df2
@@ -104,4 +106,18 @@ ggplot(pred_df2,
            group = factor(year),
            fill = factor(year))) +
   geom_col(position = "dodge")
+```
+
+Different running variable.
+
+```{r}
+gender_employment <- gender_employment |> 
+  mutate(year0 = year-2013)
+
+ptmod2 <- lm(wage_percent_of_male ~ year0 + major_category,
+             data = gender_employment)
+
+ptmod2 |> 
+  get_regression_table() |> 
+  select(term, estimate)
 ```
