@@ -2,6 +2,8 @@
 title: "MD 07 Demo"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -126,7 +128,40 @@ Let's take a sample.
 shovel1 <- bowl |> 
   rep_sample_n(size = 50)
 
-shovel1
+shovel1 |> 
+  mutate(is_red = if_else(color == "red", 1L, 0L)) |> 
+  summarize(prop_red = mean(is_red))
 ```
 
+```{r}
+shovels100 <- 
+  bowl |> 
+  rep_sample_n(size = 50,
+               reps = 100) |> 
+  mutate(is_red = if_else(color == "red", 1L, 0L)) |> 
+  group_by(replicate) |>
+  summarize(prop_red = mean(is_red))
 
+shovels100 |> 
+  ggplot(aes(x = prop_red)) +
+  geom_histogram(boundary = .5,
+                 binwidth = .10,
+                 color = "white")
+```
+
+```{r}
+shovels100_big <- 
+  bowl |> 
+  rep_sample_n(size = 300,
+               reps = 100) |> 
+  mutate(is_red = if_else(color == "red", 1L, 0L)) |> 
+  group_by(replicate) |>
+  summarize(prop_red = mean(is_red))
+
+shovels100_big |> 
+  ggplot(aes(x = prop_red)) +
+  geom_histogram(boundary = .5,
+                 binwidth = .025,
+                 color = "white")
+
+```
