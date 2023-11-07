@@ -165,3 +165,102 @@ shovels100_big |>
                  color = "white")
 
 ```
+
+## Another example
+
+```{r}
+library(worldfootballR)
+```
+
+```{r}
+#| cache: true
+
+d <- fb_match_results("ENG",
+                       "M", 
+                       2023)
+```
+
+Make the dataset I need. (I'm also going to save the original in the data folder just in case this function breaks later. It's `epl_2023.Rdata`.)
+
+```{r}
+glimpse(d)
+
+lfc2023 <- d |> 
+  filter(Home == "Liverpool" | Away == "Liverpool") |> 
+  mutate(home_points = case_when(HomeGoals > AwayGoals ~ 3,
+                                 HomeGoals < AwayGoals ~ 0,
+                                 .default = 1),
+         away_points = case_when(HomeGoals < AwayGoals ~ 3,
+                                 HomeGoals > AwayGoals ~ 0,
+                                 .default = 1),
+         lfc_points = if_else(Home == "Liverpool", home_points, away_points),
+         matchweek = as.integer(Wk)) |> 
+  select(matchweek, lfc_points) |> 
+  arrange(matchweek)
+
+glimpse(lfc2023)
+```
+
+How many points were Liverpool really going to earn that season? 67. Since there are 38 games, this was a points-per-game of 1.763158.
+
+But what about the "sample" of the early season?
+
+```{r}
+lfc2023 <- lfc2023 |> 
+  mutate(ppg_to_date = cumsum(lfc_points) / matchweek)
+```
+
+```{r}
+ggplot(lfc2023,
+       aes(x = matchweek,
+           y = ppg_to_date)) +
+    geom_hline(yintercept = 67/38, 
+               linetype = "dotted") +
+    geom_line(color = "red")
+```
+
+## Another example (simpler)
+
+```{r}
+load(here::here("Data", "gss2018.Rdata"))
+glimpse(gss2018)
+
+gss2018 <- gss2018 |> 
+  mutate(conservative = if_else(polviews >=5, 1L, 0L))
+```
+
+How do estimates change with sample size?
+
+```{r}
+set.seed(1)
+
+mean(gss2018$conservative) # full sample proportion
+
+gss30 <- gss2018 |> 
+  slice_sample(n = 30) |> 
+  mutate(sampsize = 30)
+
+gss120 <- gss2018 |> 
+  slice_sample(n = 120) |> 
+  mutate(sampsize = 120)
+
+gss480 <- gss2018 |> 
+  slice_sample(n = 480) |> 
+  mutate(sampsize = 480)
+
+gss960 <- gss2018 |> 
+  slice_sample(n = 960) |> 
+  mutate(sampsize = 960)
+
+gss_all <- gss2018 |> 
+  mutate(sampsize = nrow(gss2018))
+
+samples <- bind_rows(gss30, gss120, gss480, gss960, gss_all)
+
+samples |> 
+  group_by(sampsize) |> 
+  summarize(est_prop = mean(conservative))
+
+```
+
+
