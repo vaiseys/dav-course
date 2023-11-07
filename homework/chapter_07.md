@@ -1,14 +1,4 @@
----
-title: "Chapter 7"
-author: "Nicolas Restrepo"
-output: 
-  html_document: 
-    toc: true
-    theme: united
-    keep_md: true
----
-
-
+## Chapter 7
 
 Here, we are going to practice and reinforce some of the ideas that we encountered in chapter 5. Sampling is crucial for understanding any type of data analysis. When you are presented with brand new set of data, it is always useful to think: what groups or populations am I capturing in these data? To what groups or populations can I extrapolate insights I draw from these data? Do I have enough data? To answer these questions, it is essential to grasp sampling; to think about how features of a population might (or might not) make their way to our spreadsheets. 
 
