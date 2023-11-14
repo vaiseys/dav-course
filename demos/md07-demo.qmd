@@ -263,4 +263,20 @@ samples |>
 
 ```
 
+Let's check uncertainty of estimates.
 
+```{r}
+reps <- gss2018 |> 
+  rep_sample_n(size = 2220,
+               reps = 1000,
+               replace = TRUE) |> 
+  group_by(replicate) |> 
+  summarize(prop_cons = mean(conservative))
+  
+  
+ggplot(reps,
+       aes(x = prop_cons )) +
+  geom_histogram(color = "white",
+                 boundary = .3,
+                 binwidth = .01)
+```
