@@ -266,6 +266,7 @@ Basic difference:
 ```{r}
 ggplot(data = movies_sample, aes(x = genre, y = rating)) +
   geom_boxplot() +
+  geom_jitter(width = .2, alpha = .2) +
   labs(y = "IMDb rating")
 ```
 
