@@ -110,11 +110,11 @@ glimpse(pl_data)
 
 We have 4 columns then: the home team, the away team, the score difference (from the standpoint of the home team), and the result. We have three different types of results: an away win (aw), a home win (hw), and a draw (d). What we are interested in then is the proportion of home wins. What is the rate of winning at home and is it different that mere chance? 
 
-## Question 5
+### Question 5
 
 Use your data wrangling skills to calculate the proportion of home wins during the 2015/2016 season. 
 
-## Question 6
+### Question 6
 
 Now, we are going to shuffle. We are going to examine what proportion we would expect if a home win was equally likely as any other result. This one is a bit more interesting than the examples in the chapter because there are 3 choices instead of 2. Below, you will find some code that simulates our dataset, reshuffled, 1000 times. Here, however, we assume that an away-win, a draw, and a home-win have equal probability. Run the script and plot the resulting proportions as a histogram.
 
@@ -134,14 +134,15 @@ for (i in 1:1000) {
   sampled_proportions[i] <- prop
   
 }
+```
 
 Describe the histogram in a sentence or two. How does the proportion you found in Question 6 compare to the proportion we would expect if a home win was equally likely as any other result?
 
-## Question 7
+### Question 7
 
 In this scenario, what would be the null hypothesis and the alternative hypothesis? Provide enough detail so that I know you understand. 
 
-## Question 8
+### Question 8
 
 What would a p-value mean in this example? 
 
