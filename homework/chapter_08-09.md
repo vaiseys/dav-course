@@ -136,7 +136,7 @@ for (i in 1:1000) {
 }
 ```
 
-Describe the histogram in a sentence or two. How does the proportion you found in Question 6 compare to the proportion we would expect if a home win was equally likely as any other result?
+Describe the histogram in a sentence or two. How does the proportion you found in Question 5 compare to the proportion we would expect if a home win was equally likely as any other result?
 
 ### Question 7
 
