@@ -45,7 +45,7 @@ You may also use the `pull()` or `select()` function if you need them.
 A few hints: 
 
 1. Make sure you pay attention to the `replace` option in `rep_sample_n()`.
-2. When you have the bootstrap distribution, you can get the confidence interval by piping it to `quantile(c(.025, .975))`.
+2. When you have the bootstrap distribution, you can get the 95 percent confidence interval by using `quantile(your_data$column, c(.025, .975))`.
 
 What is the estimated confidence interval?
 
@@ -60,7 +60,7 @@ Now do it using *only* the following functions:
 
 What is the estimated confidence interval? (HINT: even though you are estimating a proportion, use `stat = "mean"` instead of `stat = "prop"`.)
 
-How similar are the two confidence intervals you calculated? Why aren't they *exactly* the same?
+How similar are the two confidence intervals you calculated? Why aren't they *exactly* the same (if you don't set the same seed)?
 
 ## History of rap
 
@@ -116,7 +116,7 @@ Use your data wrangling skills to calculate the proportion of home wins during t
 
 ### Question 6
 
-Now, we are going to shuffle. We are going to examine what proportion we would expect if a home win was equally likely as any other result. This one is a bit more interesting than the examples in the chapter because there are 3 choices instead of 2. Below, you will find some code that simulates our dataset, reshuffled, 1000 times. Here, however, we assume that an away-win, a draw, and a home-win have equal probability. Run the script and plot the resulting proportions as a histogram.
+Now, we are going to shuffle. We are going to examine what proportion we would expect if a home win was equally likely as any other result. This one is a bit more interesting than the examples in the chapter because there are 3 choices instead of 2. Below, you will find some code that simulates our dataset, reshuffled, 1000 times. Here, however, we assume that an away-win, a draw, and a home-win have equal probability. Run the script and plot the resulting proportions as a histogram. Hint: `sampled_proportions` will be stored as a _value_ in your environment. You may have to convert it to a data frame to plot as a histogram. 
 
 
 ```r
