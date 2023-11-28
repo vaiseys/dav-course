@@ -1,0 +1,165 @@
+---
+title: "MD 10 Demo"
+format: html
+editor: visual
+embed-resources: true
+---
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(broom)
+library(moderndive)
+library(ggplot2movies)
+library(ggeffects)
+theme_set(theme_light())
+```
+
+Has the relationship between movie length and average rating changed over time? I will compare films from 1974 and 2004 to see if this relationship has changed.
+
+## prep and wrangling
+
+```{r}
+#| message: false
+
+data(movies)
+glimpse(movies)
+
+features2 <- movies |>
+  filter(year == 2004 | year == 1974) |> 
+  filter(Short == 0 & 
+           length < 240 &
+           length >= 80 ) |> 
+  mutate(year = factor(year))
+```
+
+# descriptives
+
+```{r}
+ggplot(features2,
+       aes(x = length,
+           fill = year)) +
+  geom_density(alpha = .2,
+               color = NA)
+```
+
+```{r}
+ggplot(features2,
+       aes(x = rating,
+           fill = year)) +
+  geom_density(alpha = .2,
+               color = NA)
+```
+
+```{r}
+ggplot(features2,
+       aes(x = length,
+           y = rating,
+           color = year )) +
+  geom_jitter(alpha = .2) +
+  geom_smooth(method = "loess")
+```
+
+## possible models
+
+```{r}
+m1 <- lm(rating ~ length + year + Action + Animation + 
+           Comedy + Drama + Documentary + Romance,
+         data = features2)
+tidy(m1)
+
+ggpredict(m1,
+          terms = c("length", "year")) |> 
+  plot()
+```
+
+```{r}
+m2 <- lm(rating ~ length + I(length^2) + year + 
+           Action + Animation + Comedy + Drama + 
+           Documentary + Romance,
+         data = features2)
+tidy(m2)
+
+ggpredict(m2,
+          terms = c("length", "year")) |> 
+  plot()
+```
+
+```{r}
+m3 <- lm(rating ~ length * year + 
+           Action + Animation + Comedy + Drama + 
+           Documentary + Romance,
+         data = features2)
+tidy(m3)
+
+ggpredict(m3,
+          terms = c("length", "year")) |> 
+  plot()
+```
+
+```{r}
+m4 <- lm(rating ~ (length + I(length^2)) * year + 
+           Action + Animation + Comedy + Drama + 
+           Documentary + Romance,
+         data = features2)
+tidy(m4)
+
+ggpredict(m4,
+          terms = c("length", "year")) |> 
+  plot()
+```
+
+## compare models
+
+```{r}
+get_regression_summaries(m1)
+get_regression_summaries(m2)
+get_regression_summaries(m3)
+get_regression_summaries(m4)
+
+## the AIC (Akaike's Information Criterion) is AIC = N*log(RSS/N) + 2k
+## choosing the lowest is generally a reasonable idea
+
+AIC(m1,m2,m3,m4)
+```
+
+## diagnostics
+
+```{r}
+
+m3_points <- get_regression_points(m3)
+
+## linearity
+
+ggplot(m3_points,
+       aes(x = rating_hat,
+           y = residual)) +
+  geom_jitter(alpha = .2) +
+  geom_hline(yintercept = 0,
+             color = "red")
+
+## normality
+
+ggplot(m3_points,
+       aes(x = residual)) +
+  geom_histogram(boundary = 0,
+                 binwidth = .5,
+                 color = "white")
+```
+
+## interpretation
+
+```{r}
+tidy(m3, conf.int = TRUE)
+
+ggpredict(m3,
+          terms = c("length", "year")) |> 
+  plot()
+```
+
+Questions:
+* What is the expected difference in rating between a 90-minute and 120-minute film in 2004? In 1974?
+* Why do you think this has changed?
+* Should studios just make longer movies to increase critical acclaim? Why might that not work?
+* What other limitations might there be in this analysis?
