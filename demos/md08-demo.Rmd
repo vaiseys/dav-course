@@ -20,9 +20,9 @@ theme_set(theme_minimal())
 
 Let's think about this in the context of an election. Let's think about the NC Senate race.
 
-* What do we want to know?
-* What is the population? (V)
-* What is the sampling frame? (LV/RV)
+-   What do we want to know?
+-   What is the population? (V)
+-   What is the sampling frame? (LV/RV)
 
 Here's the [latest polling](https://projects.fivethirtyeight.com/polls/senate/2022/north-carolina/). NOTE: this link isn't likely to keep working after election day.
 
@@ -32,7 +32,7 @@ We've been building up to this point already. Last time we were looking at lots 
 
 ## Sampling Distribution
 
-This is the value of doing simulations. We can see what would happen if we did do tons of different polls of different sizes. 
+This is the value of doing simulations. We can see what would happen if we did do tons of different polls of different sizes.
 
 Let's imagine the true proportion of voters that is going to vote for the Republican is .53 (i.e., 53%). We can simulate 100 worlds where we survey 250 people and see how variable the estimates would be.
 
@@ -100,7 +100,7 @@ ggplot(sim1000,
                      limits = c(.43, .63))
 ```
 
-I illustrated this with 100 polls because I wanted you too see the variability. But what if we just kept replicating samples of size 1000 over and over forever? As we get closer and closer to infinite replicate samples, we get closer to what's called the **sampling distribution**. 
+I illustrated this with 100 polls because I wanted you too see the variability. But what if we just kept replicating samples of size 1000 over and over forever? As we get closer and closer to infinite replicate samples, we get closer to what's called the **sampling distribution**.
 
 Here's an example with 100,000 replicate samples. (I'll draw using a density plot this time, too, instead of using `geom_bar()` with the rounded values.)
 
@@ -245,8 +245,8 @@ HINT: `get_ci()` is a synonym for the longer function name.
 
 Where does this number come from? That is, what is `get_confidence_interval()` or `get_ci()` actually doing?
 
-* percentile method (default)
-* standard error method
+-   percentile method (default)
+-   standard error method
 
 This is a visualization of the percentile method.
 
@@ -276,7 +276,7 @@ Now we can't directly access the sampling distribution, which---remember---would
 sd(boot_dist$stat)
 ```
 
-If we want a 95% confidence interval, we need values that span the normal curve from -1.96 standard errors to +1.96 standard errors. 
+If we want a 95% confidence interval, we need values that span the normal curve from -1.96 standard errors to +1.96 standard errors.
 
 ```{r}
 curve(dnorm(x,0,1),

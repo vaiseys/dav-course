@@ -67,7 +67,7 @@ ggplot(features2,
 m1 <- lm(rating ~ length + year + Action + Animation + 
            Comedy + Drama + Documentary + Romance,
          data = features2)
-tidy(m1)
+tidy(m1, conf.int = TRUE)
 
 ggpredict(m1,
           terms = c("length", "year")) |> 
@@ -91,7 +91,7 @@ m3 <- lm(rating ~ length * year +
            Action + Animation + Comedy + Drama + 
            Documentary + Romance,
          data = features2)
-tidy(m3)
+tidy(m3, conf.int = TRUE)
 
 ggpredict(m3,
           terms = c("length", "year")) |> 
@@ -158,8 +158,4 @@ ggpredict(m3,
   plot()
 ```
 
-Questions:
-* What is the expected difference in rating between a 90-minute and 120-minute film in 2004? In 1974?
-* Why do you think this has changed?
-* Should studios just make longer movies to increase critical acclaim? Why might that not work?
-* What other limitations might there be in this analysis?
+Questions: \* What is the expected difference in rating between a 90-minute and 120-minute film in 2004? In 1974? \* Why do you think this has changed? \* Should studios just make longer movies to increase critical acclaim? Why might that not work? \* What other limitations might there be in this analysis?
