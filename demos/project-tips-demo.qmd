@@ -1,0 +1,105 @@
+---
+title: "final demo"
+format: html
+editor: source
+embed-resources: true
+warning: false
+message: false
+---
+
+### Grade update
+
+Everything is up, including provisional Forum 4 grades.
+
+Here's how percentages on Canvas translate into letters on the GPA scale.
+
+Above 100%  (4.0) = A+ (9 of you are currently here)
+Above 92.5% (3.7) = A  (7 are here)
+Above 82.5% (3.3) = A- (9 are here)
+Above 75.0% (3.0) = B+
+Above 67.5% (2.7) = B
+Above 60.0% (2.4) = B-
+Above 50.0% (2.0) = C
+
+There are 26 students in the class.
+
+### How do I submit my project?
+
+Post to repo AND submit .qmd and rendered .html via Canvas. This will facilitate peer review.
+
+### What will the peer evaluation process look like?
+
+See bottom of [syllabus](https://docs.google.com/document/d/1RtAy3MvxYJXnEvEZBKmN7ITIvSL72nA7uaoNrUFuOKs/edit#heading=h.nodovmajcwsh).
+
+### When and how should I hide my code?
+
+You should rarely (if ever) show code in the rendered project. Noah and I can look at the .qmd file for that. Imagine you are presenting this to a **knowledgeable reader who knows basic statistics but who is not an R coder**. (That is, you don't have to explain linear regression, confidence intervals, or p-values as if the person has never heard of them.)
+
+You can hide your code by adding `echo: false` in the block at the top of the .qmd file (e.g., below `embed_resources: true`. This will set the default for the whole document. You can change this for a specific code block (if you need to) by adding `#| echo: true` at the beginning of that specific block.
+
+Make sure you don't have any `messages` or `warnings` poking through in your rendered document either.
+
+### Outputting nicer tables
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(broom)
+
+mtcars |> 
+  group_by(cyl) |>
+  summarize(mmpg = mean(mpg)) |> 
+  knitr::kable(digits = 1)
+```
+
+```{r}
+fit <- lm(mpg ~ wt + cyl,
+          data = mtcars) 
+
+tidy(fit, conf.int = TRUE) |> 
+  select(term, estimate, conf.low, conf.high) |> 
+  knitr::kable(digits = 2)
+```
+
+### Interpreting and displaying log-transformed outcomes
+
+If your outcome is a skewed number (like the value of a player or an income), you generally want to use the natural log as the outcome.
+
+```{r}
+library(ggeffects)
+
+fit <- lm(log(mpg) ~ wt,
+          data = mtcars)
+
+tidy(fit, conf.int = TRUE) |> 
+  select(term, estimate, conf.low, conf.high) |> 
+  knitr::kable(digits = 2)
+```
+
+This means that each additional 1000 lbs of weight predicts a miles-per-gallon rating that is 24 percent lower. I got this by taking $e^{-.27} = .76$; if I subtract that from 1, I get .24.
+
+If you log the value in the equation (as above) you can use `ggpredict()` to plot the predictions on the *original* non-logged scale.
+
+```{r}
+ggpredict(fit, terms = "wt") |> 
+  plot()
+```
+
+### Comparing models appropriately
+
+The rules: \* we only need to see the full interpretation of the *chosen* model (e.g., the one with the lowest AIC). \* you can only compare models if you are estimating them on the same data
+
+### How do we center text?
+
+Generally, I wouldn't! But if you have to, you would have to use html tags, like so:
+
+<p style="text-align: center;">Centered text</p>
+
+### What graphs should I include?
+
+Only include graphs that actually help you explain your topic sufficiently to answer your research question. It won't help you to include pointless graphs that don't serve any purpose. In fact, it will probably hurt!
+
+### How do we insert citations?
+
+You are not required to provide citations unless you are borrowing someone else's ideas. (In that case, you MUST, of course, provide citations!) Integrating citations with Quarto is pretty easy. You can just click on `Insert > Citation` in the dropdown menu in the visual RStudio editor. Or you can just type them manually if you find that easier.
