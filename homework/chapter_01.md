@@ -100,7 +100,14 @@ You might think it is unfair that I made you use an unknown function `n_distinct
 
 ## Question 4
 
-The reason we also loaded the `causact` package is because it includes some interesting data. As I did above, use the `glimpse()` function to look at an object called `baseballData`.
+The following chunk of code will load some interesting data directly from the internet:
+
+``` r
+url <- "https://raw.githubusercontent.com/vaiseys/dav-course/refs/heads/main/Data/baseballData.csv"
+baseballData <- read.csv(url, stringsAsFactors = TRUE)
+```
+
+As I did above, use the `glimpse()` function to look at the object called `baseballData`.
 
 This function gives you a ton of information.
 
