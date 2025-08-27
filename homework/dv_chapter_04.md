@@ -35,13 +35,13 @@ The first thing that we are going to look at is how rating develops across seaso
 
 
 ```r
-tv_long <- tv_ratings %>% 
-  group_by(title) %>% 
-  summarise(num_seasons = n()) %>% 
-  ungroup() %>% 
+tv_long <- tv_ratings |> 
+  group_by(title) |> 
+  summarise(num_seasons = n()) |> 
+  ungroup() |> 
   left_join(tv_ratings, by = "title") 
 
-tv_long <- tv_long %>% 
+tv_long <- tv_long |> 
   filter(num_seasons >= 5)
 ```
 
@@ -77,11 +77,11 @@ First, because the `genres` names are so convoluted, I am going to classify ever
 
 
 ```r
-comedies_dramas <- tv_ratings %>% 
+comedies_dramas <- tv_ratings |> 
   mutate(is_comedy = if_else(str_detect(genres, "Comedy"), 
                              1, 
-                             0)) %>% # If it contains the word comedy then 1, else 0
-  filter(is_comedy == 1 | genres == "Drama") %>% # Keep comedies and dramas
+                             0)) |> # If it contains the word comedy then 1, else 0
+  filter(is_comedy == 1 | genres == "Drama") |> # Keep comedies and dramas
   mutate(genres = if_else(genres == "Drama", # Make it so that we only have those two genres
                           "Drama", 
                           "Comedy"))

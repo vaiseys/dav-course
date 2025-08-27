@@ -4,7 +4,9 @@ These are going to be some complementary exercises to get you even more comforta
 
 ## Question 1
 
-Let's begin by reviewing how to install packages. Try installing two packages called `dplyr`, and `igraph`.These will come in handy in our examples below.
+Let's begin by reviewing how to install packages. Try installing two packages called `dplyr`, and `igraph`. These will come in handy in our examples below.
+
+*Note. The `install.packages(<pkgname>)` function should be typed in the console only.* 
 
 ## Question 2
 
@@ -100,7 +102,7 @@ You might think it is unfair that I made you use an unknown function `n_distinct
 
 ## Question 4
 
-The following chunk of code will load some interesting data directly from the internet:
+The following chunk of code will load some interesting data directly from the Internet:
 
 ``` r
 url <- "https://raw.githubusercontent.com/vaiseys/dav-course/refs/heads/main/Data/baseballData.csv"
@@ -148,7 +150,7 @@ baseballData[,2:3] |> head()
 ## 6  ARI     SDN
 ```
 
-What do these two columns represent?
+These two columns represent the abbreviation for home team (i.e. stadium where game played) and the abbreviation for visiting team.
 
 ## Question 6
 

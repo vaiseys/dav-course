@@ -53,8 +53,8 @@ One thing you might notice is that we have a fair amount of `NA`s in our variabl
 
 
 ```r
-pitchers_cln <- pitchers %>% 
-  select(ERA, BAOpp, WP) %>% 
+pitchers_cln <- pitchers |> 
+  select(ERA, BAOpp, WP) |> 
   drop_na()
 ```
 

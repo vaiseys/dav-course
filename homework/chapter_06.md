@@ -39,7 +39,7 @@ Before we begin our analysis, it would be useful to take a bird's eye view of th
 
 
 ```r
-gender_employment%>% 
+gender_employment|> 
   ggplot(aes(x = year, y = wage_percent_of_male)) +
   geom_jitter(alpha = 0.1) + 
   geom_smooth(method = "lm") + 
@@ -58,7 +58,7 @@ Let's begin by fitting a model where `wage_percent_of_male` is the outcome varia
 
 
 ```r
-gender_employment <- gender_employment %>% 
+gender_employment <- gender_employment |> 
   mutate(major_category = as.factor(major_category), 
          major_category = relevel(major_category, ref = "Management, Business, and Financial"))
 ```
@@ -112,8 +112,8 @@ Before we build the model we want to explore the relationship between these vari
 
 
 ```r
-gender_employment %>% 
-  select(year, wage_percent_of_male, percent_female) %>% 
+gender_employment |> 
+  select(year, wage_percent_of_male, percent_female) |> 
   cor(use = "complete.obs")
 ```
 

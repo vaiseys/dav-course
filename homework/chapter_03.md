@@ -28,7 +28,7 @@ First, let's keep only the records for `Three Lap`. We are interested in whole r
 
 
 ```r
-three_laps <- mario_kart %>% filter(type == "Three Lap")
+three_laps <- mario_kart |> filter(type == "Three Lap")
 ```
 
 
@@ -71,10 +71,10 @@ Let me introduce you to a cool trick. The `slice` function takes a certain numbe
 
 
 ```r
-three_laps %>% 
-  group_by(player) %>% 
-  arrange(time) %>% 
-  slice(1) %>% 
+three_laps |> 
+  group_by(player) |> 
+  arrange(time) |> 
+  slice(1) |> 
   head()
 ```
 

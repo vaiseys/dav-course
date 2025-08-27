@@ -58,7 +58,7 @@ In the chapter we learned how to filter datasets. Can you figure out how to keep
 
 
 ```r
-gold_medalists <- olympics %>% 
+gold_medalists <- olympics |> 
   <function_name>(medal == "<something>")
 ```
 
@@ -78,9 +78,9 @@ The following bit of code gives us the amount of medals that the U.S. has won ac
 
 
 ```r
-us_medals <- gold_medalists %>% 
-  filter(noc == "USA") %>% 
-  group_by(year) %>% 
+us_medals <- gold_medalists |> 
+  filter(noc == "USA") |> 
+  group_by(year) |> 
   summarise(num_medals = n())
 ```
 
@@ -92,9 +92,8 @@ What was the country's most successful year? As a bonus, can you guess why the l
 
 Now, let's explore differences in the kind of athlete that has excelled at different events. Let's look at two hallmark events in the Olympics: gymnastics and the 100 meter dash. I am going to make a dataset that only includes data about these events. 
 
-
 ```r
-two_events <- gold_medalists %>%
+two_events <- gold_medalists |>
   filter(
     event == "Gymnastics Men's Individual All-Around"  |
     event == "Gymnastics Women's Individual All-Around" |
@@ -123,7 +122,7 @@ Let's go back to gold medalists and keep only U.S. cases.
 
 
 ```r
-us_medalists <- gold_medalists %>% 
+us_medalists <- gold_medalists |> 
   filter(noc == "USA")
 ```
 

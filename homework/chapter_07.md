@@ -22,8 +22,8 @@ Given that we are only interested in scientific Nobel prizes, let's get rid of t
 
 
 ```r
-nobel_winners_flt <- nobel_winners %>% 
-  filter(category != "Peace") %>% 
+nobel_winners_flt <- nobel_winners |> 
+  filter(category != "Peace") |> 
   mutate(is_us = if_else(birth_country == "United States of America", 1, 0))
 ```
 
@@ -31,8 +31,8 @@ Now, what is the *true* proportion of US-born Nobel prize winners?
 
 
 ```r
-true_prop <- nobel_winners_flt %>% 
-  group_by(is_us) %>% 
+true_prop <- nobel_winners_flt |> 
+  group_by(is_us) |> 
   summarise(prop = n()/nrow(nobel_winners_flt))
 
 ggplot() + 
@@ -53,8 +53,8 @@ our_sample <- sample_n(nobel_winners_flt,
                        size = 25, 
                        replace = F)
 
-sample_prop <- our_sample %>% 
-  group_by(is_us) %>% 
+sample_prop <- our_sample |> 
+  group_by(is_us) |> 
   summarise(prop = n()/nrow(our_sample))
 
 # How does our proportion look like? 

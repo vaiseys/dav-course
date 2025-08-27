@@ -49,7 +49,7 @@ Hopefully you have learned something important here: often the relationship betw
 
 
 ```r
-twitch_data <- twitch_data %>% 
+twitch_data <- twitch_data |> 
   mutate(log_viewers = log10(average_viewers), 
          log_followers = log10(followers))
 ```
@@ -103,7 +103,7 @@ Look, it's our original data but also a bunch more information. The `.fitted` co
 
 
 ```r
-pred_data %>% 
+pred_data |> 
   ggplot(aes(x = log_followers, 
              y = log_viewers)) +
   geom_jitter(alpha = 0.4) + 
@@ -141,7 +141,7 @@ Now, we are ready to fit the model. Fit a linear regression where your outcome v
 
 
 ```r
-twitch_data <- twitch_data %>% 
+twitch_data <- twitch_data |> 
   mutate(language = as.factor(language), 
          language = relevel(language, ref = "English"))
 ```

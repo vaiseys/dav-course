@@ -73,7 +73,7 @@ Now, we filter our original name so that only these schools are included.
 
 
 ```r
-winners <- wncaa %>% 
+winners <- wncaa |> 
   filter(school %in% champ_names)
 ```
 
