@@ -128,7 +128,7 @@ us_medalists <- gold_medalists |>
 
 Make a barplot where the x axis is `year`. Make sure you can see parallel lines for female and male athletes. 
 
-> Hint: you can use `position = dodge` for this. 
+> Hint: you can use `position = "dodge"` for this. 
 
 Can you notice any patterns?
 
