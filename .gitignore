@@ -24,3 +24,6 @@
 # raw homework Rmds
 /hw_rmds/
 /.quarto/
+
+# no quizzes
+/quizzes/
