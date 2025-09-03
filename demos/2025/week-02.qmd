@@ -1,0 +1,108 @@
+---
+title: "Intro to data visualization"
+author: Steve Vaisey
+format: html
+embed-resources: true
+---
+
+OK first I'm going to load the packages I need. I will come back and add any additional packages later if I need to.
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+Let's get started learning how to make pictures. First I need some data.
+
+```{r}
+data(flights)
+```
+
+Let's start making our first graph.
+
+```{r}
+#| eval: false
+
+ggplot(
+  data = flights,
+  mapping = aes(x = month,
+                y = dep_delay)) +
+  geom_point(alpha = .1)
+```
+
+(I actually did not run the code above because it was taking too long and it was annoying me.)
+
+Let's make this easier on ourselves by using a dataset with fewer points, like `mtcars`. What are the elements to include:
+
+- Data
+- Axes
+- `geom` (or type of graph)
+- theme
+- labels
+
+```{r}
+ggplot(mtcars,
+       aes(x = wt,
+           y = mpg)) +
+  geom_point(alpha = .6) +
+  theme_minimal() +
+  labs(x = "Weight (1000s of pounds)", 
+       y = "Miles per gallon",
+       title = "Weight and MPG for 32 Cars, 1973")
+```
+
+Let's go back to `flights` and try a line plot. In order to do this, I probably need to mess with the data a little bit. YOU DON'T KNOW HOW TO DO THIS YET! DON'T FREAK OUT!!!
+
+```{r}
+month_avgs <- flights |>
+  drop_na(dep_delay) |> 
+  group_by(month) |> 
+  summarize(avg_delay = mean(dep_delay))
+
+```
+
+Let's plot this now.
+
+```{r}
+ggplot(month_avgs,
+       aes(x = month,
+           y = avg_delay)) +
+  geom_line(alpha = 1/3) +
+  geom_point() +
+  theme_minimal()
+```
+
+Let's look at how a plot is actually constructed.
+
+```{r}
+p <- ggplot(month_avgs,
+            aes(x = month,
+                y = avg_delay))
+
+
+p + geom_point() + 
+  geom_line() + 
+  theme_minimal()
+```
+
+Let's pivot to histograms. Let's NOT look at the distribution of departure delays. Let's look at the distribution of car weights.
+
+```{r}
+ggplot(mtcars,
+       aes(x = wt)) +
+  geom_histogram(color = "white",
+                 binwidth = .5,
+                 boundary = 1) +
+  theme_minimal()
+
+```
+
+Let's do another histogram of air time.
+
+```{r}
+ggplot(flights,
+       aes(x = air_time)) +
+  geom_histogram(color = "white") +
+  theme_minimal()
+```
+

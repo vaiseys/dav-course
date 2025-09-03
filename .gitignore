@@ -27,3 +27,6 @@
 
 # no quizzes
 /quizzes/
+
+# no htmls for demos
+/demos/*.html
