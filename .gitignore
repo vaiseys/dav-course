@@ -3,6 +3,7 @@
 .RData
 *_cache/
 /cache/
+.DS_Store
 
 # don't want this saved to repo but need it in the project folder sometimes
 /MD-Data/*
