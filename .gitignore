@@ -4,6 +4,7 @@
 *_cache/
 /cache/
 .DS_Store
+.Rproj
 
 # don't want this saved to repo but need it in the project folder sometimes
 /MD-Data/*
