@@ -14,15 +14,15 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-Here, I will keep track of some cool datasets to use in the course. 
+Here, I will keep track of some cool datasets to use in the course.
 
-## UN Votes 
+## UN Votes
 
 This is a dataset that provides information about how countries have voted in the UN National Assembly. The data comes neatly bundled in a package that you can get by running `install.packages("unvotes")`.
 
-The package contains three datasets: 
+The package contains three datasets:
 
-1) `un_votes` contains all the decisions for each resolution and each country. 
+1)  `un_votes` contains all the decisions for each resolution and each country.
 
 ```{r}
 # Load the packages
@@ -33,38 +33,40 @@ library(tidyverse)
 glimpse(un_votes)
 ```
 
-2) `un_roll_calls` includes information about each roll call: what the vote was about, when it happened, and what was being discussed: 
+2)  `un_roll_calls` includes information about each roll call: what the vote was about, when it happened, and what was being discussed:
 
 ```{r}
 glimpse(un_roll_calls)
 ```
-3) `un_roll_call_issues` relates each vote to broader themes. 
+
+3)  `un_roll_call_issues` relates each vote to broader themes.
 
 ```{r}
 # View data 
 glimpse(un_roll_call_issues)
 # How many votes per issue? 
-un_roll_call_issues %>% 
-  count(issue, sort = T)
+un_roll_call_issues |>
+  count(issue, sort = TRUE)
 ```
 
-## Causact 
+## Causact
 
-The `causact` package is designed to help with the construction and use of causal models. However, it also contains some interesting datasets. Let's highlight a couple. 
+The `causact` package is designed to help with the construction and use of causal models. However, it also contains some interesting datasets. Let's highlight a couple.
 
 As usual, you can get this package by running `install.packages("causact")`
 
 ### Baseball
 
-`baseballData` contains the final scores of 12,145 baseball games played in 2010. 
+`baseballData` contains the final scores of 12,145 baseball games played in 2010.
 
 ```{r}
 library(causact)
 glimpse(baseballData)
 ```
-### Corruption 
 
-If you are more into international relations and development, `corruptDF` contains information about the human development index and the corruption perception index for different countries. 
+### Corruption
+
+If you are more into international relations and development, `corruptDF` contains information about the human development index and the corruption perception index for different countries.
 
 ```{r}
 glimpse(corruptDF)
@@ -78,9 +80,9 @@ glimpse(corruptDF)
 glimpse(ticketsDF)
 ```
 
-## Malaria 
+## Malaria
 
-If you are interested in public health, this could be of interest. In the folder, you will find some datasets compiled from the `malariaAtlas` package. There are three datasets here. The first contais the incidence of Malaria for each country each year. 
+If you are interested in public health, this could be of interest. In the folder, you will find some datasets compiled from the `malariaAtlas` package. There are three datasets here. The first contais the incidence of Malaria for each country each year.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13).
 
@@ -88,13 +90,15 @@ You can find more information [here](https://github.com/rfordatascience/tidytues
 df <- read_csv("malaria_incidence.csv")
 glimpse(df)
 ```
-The second dataset contains the deaths of malaria standardized across all ages for a given country-year. 
+
+The second dataset contains the deaths of malaria standardized across all ages for a given country-year.
 
 ```{r}
 df <- read_csv("malaria_deaths_standard.csv")
 glimpse(df)
 ```
-Finally, we have a dataset of malaria deaths but among specific age groups. 
+
+Finally, we have a dataset of malaria deaths but among specific age groups.
 
 ```{r}
 df <- read_csv("malaria_deaths_age_specific.csv")
@@ -103,7 +107,7 @@ glimpse(df)
 
 ## NFL Stats (2000-2017)
 
-If you are interested in Football, we have a a dataset of player stats in the NFL from 2000 to 2017. 
+If you are interested in Football, we have a a dataset of player stats in the NFL from 2000 to 2017.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-08-28).
 
@@ -112,28 +116,27 @@ df <- read_csv("nfl_stats.csv")
 glimpse(df)
 ```
 
-Maybe you are interested in how the salaries for different positions have evolved across the years. We have you covered. 
+Maybe you are interested in how the salaries for different positions have evolved across the years. We have you covered.
 
 ```{r}
 df <- read_csv("nfl_salaries.csv")
 glimpse(df)
 ```
 
-## California Fires 
+## California Fires
 
-Maybe you are interested in climate change. Then, the number of California fires across years, and the damaged they have caused, might be of interest. 
+Maybe you are interested in climate change. Then, the number of California fires across years, and the damaged they have caused, might be of interest.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-08-21).
-
 
 ```{r}
 df <- read_csv("fires.csv")
 glimpse(df)
 ```
 
-## TV & Movie Ratings 
+## TV & Movie Ratings
 
-We also have a dataset that contains TV & movie ratings taken from IMDB. The dataset covers titles released between 2000 and 2019. 
+We also have a dataset that contains TV & movie ratings taken from IMDB. The dataset covers titles released between 2000 and 2019.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-08).
 
@@ -144,7 +147,7 @@ glimpse(df)
 
 ## Incarceration Trends
 
-Here's a data about the people incarcerated at the county level from 1970 to 2015. This is a big dataset so it might take a while to load. 
+Here's a data about the people incarcerated at the county level from 1970 to 2015. This is a big dataset so it might take a while to load.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-22).
 
@@ -153,9 +156,9 @@ df <- read_csv("incarceration_trends.csv")
 glimpse(df)
 ```
 
-## Grand Slams Timeline 
+## Grand Slams Timeline
 
-If you like tennis, this could be interesting. Here's data about participation in different Grand Slams. Every observation is a player and we have information about how they did in the tournament. 
+If you like tennis, this could be interesting. Here's data about participation in different Grand Slams. Every observation is a player and we have information about how they did in the tournament.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-04-09).
 
@@ -167,7 +170,7 @@ glimpse(df)
 
 ## Emplyoment by Gender
 
-This is an interesting dataset about patterns of emplyoment, across gender, for different occupations. The dataset includes information about the type of occupational group and the share of employees who are either female or male. There is also information about the earnings for each group. 
+This is an interesting dataset about patterns of emplyoment, across gender, for different occupations. The dataset includes information about the type of occupational group and the share of employees who are either female or male. There is also information about the earnings for each group.
 
 ```{r}
 df <- read_csv("gender_employment.csv")
@@ -179,11 +182,11 @@ You can find more information [here](https://github.com/rfordatascience/tidytues
 
 ## Soccer Women's World Cup
 
-This one is close to my heart; it contains information about the outcomes of all World Cup games in the women's game. 
+This one is close to my heart; it contains information about the outcomes of all World Cup games in the women's game.
 
 You can see more information about this dataset [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-07-09).
 
-There is *free* play-to-play data for the last World Cup [here](https://github.com/statsbomb/StatsBombR), if you are interested in more detailed analysis. 
+There is *free* play-to-play data for the last World Cup [here](https://github.com/statsbomb/StatsBombR), if you are interested in more detailed analysis.
 
 ```{r}
 df <- read_csv("wwc_outcomes.csv")
@@ -192,7 +195,7 @@ glimpse(df)
 
 ## UFO Sightings
 
-Just a wild resource. More that 80,000 recorded UFO sightings including the length of the encounter and what shape the supposed flying object was. An incredible testament to human creativity. The dataset is big so I am not including it in the repo directly. Instead, I am going to show you how to load it directly from Github. 
+Just a wild resource. More that 80,000 recorded UFO sightings including the length of the encounter and what shape the supposed flying object was. An incredible testament to human creativity. The dataset is big so I am not including it in the repo directly. Instead, I am going to show you how to load it directly from Github.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-25).
 
@@ -202,21 +205,20 @@ ufo_sightings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 glimpse(ufo_sightings)
 ```
 
-## Nobel Prize Winners 
+## Nobel Prize Winners
 
-Here's a dataset that compiles all Nobel prize winners. It contains information about their discipline, alma mater, what the recognition was for, and much more. 
+Here's a dataset that compiles all Nobel prize winners. It contains information about their discipline, alma mater, what the recognition was for, and much more.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-05-14).
-
 
 ```{r}
 df <- read_csv("nobel_winners.csv")
 glimpse(df)
 ```
 
-## Rap artists 
+## Rap artists
 
-In 2020, the BBC asked about 100 critics, artists, and music industry folks about their top 5 hip hop tracks. This dataset contains the aggregated results. 
+In 2020, the BBC asked about 100 critics, artists, and music industry folks about their top 5 hip hop tracks. This dataset contains the aggregated results.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-04-14).
 
@@ -225,9 +227,9 @@ df <- read_csv("rap_artists.csv")
 glimpse(df)
 ```
 
-## The NCAA Women's Basketball Tournament 
+## The NCAA Women's Basketball Tournament
 
-This dataset contains detailed information about how each of the teams that has qualified to the tournament since 1982 has done. 
+This dataset contains detailed information about how each of the teams that has qualified to the tournament since 1982 has done.
 
 More information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-10-06).
 
@@ -236,9 +238,9 @@ df <- read_csv("wncaa.csv")
 glimpse(df)
 ```
 
-## Tour de France 
+## Tour de France
 
-Here's some cool data about the biggest cycling competition in the world. We have two datasets `tour_winners` and `tour_stages`. The former gives details about each tour overall winner. The latter gives information about each specific stage: its length, origin, destination, and winner. 
+Here's some cool data about the biggest cycling competition in the world. We have two datasets `tour_winners` and `tour_stages`. The former gives details about each tour overall winner. The latter gives information about each specific stage: its length, origin, destination, and winner.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-04-07)
 
@@ -250,7 +252,6 @@ df <- read_csv("tour_stages.csv")
 glimpse(df)
 ```
 
-<<<<<<< HEAD
 ## FBREF 2020-21 Football (Soccer) Data
 
 This is 2020-21 data on individual players from Europe's top 5 leagues. From the FBREF site. I first found the data [here](https://tonyelhabr.netlify.app/posts/dimensionality-reduction-and-clustering/). Because it is in Excel format, you will have to do an additional step it get it in. Here's some example code:
@@ -262,11 +263,9 @@ df <- 'FBRef 2020-21 T5 League Data.xlsx' |>
 glimpse(df)
 ```
 
-=======
+## Government Spending on Kids
 
-## Government Spending on Kids 
-
-Here's one for the folks interested in public policy. Here's information about government spending on policy directed at children. The dataset includes the specific policy on which the money was spent, the raw amount spent, the amount adjusted for inflation, and the amount spent per child. 
+Here's one for the folks interested in public policy. Here's information about government spending on policy directed at children. The dataset includes the specific policy on which the money was spent, the raw amount spent, the amount adjusted for inflation, and the amount spent per child.
 
 More information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-09-15)
 
@@ -275,12 +274,11 @@ df <- read_csv("kids.csv")
 glimpse(df)
 ```
 
+## Video Game Trends
 
-## Video Game Trends 
+This dataset documents the amount of players that video games every month, and it records how much these numbers have changed across months.
 
-This dataset documents the amount of players that video games every month, and it records how much these numbers have changed across months. 
-
-For more information, you can click [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-03-16). 
+For more information, you can click [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-03-16).
 
 ```{r}
 df <- read_csv("video_games.csv")
@@ -289,9 +287,9 @@ glimpse(df)
 
 ## Mario Kart Records
 
-This one is fun: it is a dataset that records Mario Kart records. It gives you information about the racer, the track, the speed, and how long the record held. There are two complementary datasets here. One is called `world_records` and it holds information about the records themselves. `drivers` gives more information about the players that set the records. 
+This one is fun: it is a dataset that records Mario Kart records. It gives you information about the racer, the track, the speed, and how long the record held. There are two complementary datasets here. One is called `world_records` and it holds information about the records themselves. `drivers` gives more information about the players that set the records.
 
-You can go [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-05-25) for more information. 
+You can go [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-05-25) for more information.
 
 ```{r}
 df <- read_csv("world_records.csv")
@@ -302,7 +300,7 @@ glimpse(df)
 
 ## Olympic Medals
 
-Here's a comprehensive dataset of athletes who have won medals in the Olympic games. Given that the dataset is quite heavy, I will show you how to load it directly. 
+Here's a comprehensive dataset of athletes who have won medals in the Olympic games. Given that the dataset is quite heavy, I will show you how to load it directly.
 
 For more information go [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-07-27).
 
@@ -312,38 +310,38 @@ df  <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/m
 glimpse(df)
 ```
 
-## College Sports Budgets 
+## College Sports Budgets
 
-This might be one might peak your interest. It is a detailed dataset about how colleges spend their sports budgets, and how much they get back in revenue. This one is also quite big so we will read it directly. 
+This might be one might peak your interest. It is a detailed dataset about how colleges spend their sports budgets, and how much they get back in revenue. This one is also quite big so we will read it directly.
 
-[Here's](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-03-29/readme.md) more information about the data.  
+[Here's](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-03-29/readme.md) more information about the data.
 
 ```{r}
 df  <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-29/sports.csv')
 glimpse(df)
 ```
 
-## Twitch Data 
+## Twitch Data
 
-This is an interesting dataset. Streaming is now one of the preferred forms of entertainment and Twitch has become the natural home for this genre. This dataset was uploaded to kaggle and can be found [here](https://www.kaggle.com/datasets/aayushmishra1512/twitchdata). It contains a lot of information about Twitch's top streamers: 
+This is an interesting dataset. Streaming is now one of the preferred forms of entertainment and Twitch has become the natural home for this genre. This dataset was uploaded to kaggle and can be found [here](https://www.kaggle.com/datasets/aayushmishra1512/twitchdata). It contains a lot of information about Twitch's top streamers:
 
 ```{r}
 twitch_data <- read_csv("../Data/twitchdata-update.csv")
 glimpse(twitch_data)
 ```
 
-## World Cup Shootouts 
+## World Cup Shootouts
 
-This is one of my favorite datasets. It contains data for every penalty kick in a World Cup shootout from 1982 to 2018. It was built and uploaded to kaggle by Pablo L. Landeros. You can find it [here](https://www.kaggle.com/datasets/pablollanderos33/world-cup-penalty-shootouts). 
+This is one of my favorite datasets. It contains data for every penalty kick in a World Cup shootout from 1982 to 2018. It was built and uploaded to kaggle by Pablo L. Landeros. You can find it [here](https://www.kaggle.com/datasets/pablollanderos33/world-cup-penalty-shootouts).
 
 ```{r}
 penalties <- read_csv("../Data/WorldCupShootouts.csv")
 glimpse(penalties)
 ```
 
-## English Premier League 
+## English Premier League
 
-This is a dataset containing the results for the 2015/2016 English Premier League season. It was a truly unexpected season and you should look it up. I got the dataset from an excellent tutorial by  Milad Kharratzadeh. You can find it [here](https://github.com/milkha/EPL). This is what the data looks like: 
+This is a dataset containing the results for the 2015/2016 English Premier League season. It was a truly unexpected season and you should look it up. I got the dataset from an excellent tutorial by Milad Kharratzadeh. You can find it [here](https://github.com/milkha/EPL). This is what the data looks like:
 
 ```{r}
 pl_data <- read_csv("../Data/premier_league.csv")
@@ -351,5 +349,4 @@ pl_data <- read_csv("../Data/premier_league.csv")
 glimpse(pl_data)
 ```
 
-Each row represents a match. We have the home team, away team, the score (in terms of difference), and the categorical result. That last one is `aw` when the away team wins, `d` when there's a draw, and `hw` when the home team takes the points. 
->>>>>>> 3bff384 (My data)
+Each row represents a match. We have the home team, away team, the score (in terms of difference), and the categorical result. That last one is `aw` when the away team wins, `d` when there's a draw, and `hw` when the home team takes the points. \>\>\>\>\>\>\> 3bff384 (My data)

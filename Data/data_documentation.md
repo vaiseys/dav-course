@@ -8,20 +8,17 @@ output:
     keep_md: true
 ---
 
+Here, I will keep track of some cool datasets to use in the course.
 
-
-Here, I will keep track of some cool datasets to use in the course. 
-
-## UN Votes 
+## UN Votes
 
 This is a dataset that provides information about how countries have voted in the UN National Assembly. The data comes neatly bundled in a package that you can get by running `install.packages("unvotes")`.
 
-The package contains three datasets: 
+The package contains three datasets:
 
-1) `un_votes` contains all the decisions for each resolution and each country. 
+1)  `un_votes` contains all the decisions for each resolution and each country.
 
-
-```r
+``` r
 # Load the packages
 library(unvotes)
 library(tidyverse)
@@ -30,7 +27,7 @@ library(tidyverse)
 glimpse(un_votes)
 ```
 
-```
+```         
 ## Rows: 869,937
 ## Columns: 4
 ## $ rcid         <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
@@ -39,14 +36,13 @@ glimpse(un_votes)
 ## $ vote         <fct> yes, no, yes, yes, yes, yes, yes, yes, yes, yes, yes, yes…
 ```
 
-2) `un_roll_calls` includes information about each roll call: what the vote was about, when it happened, and what was being discussed: 
+2)  `un_roll_calls` includes information about each roll call: what the vote was about, when it happened, and what was being discussed:
 
-
-```r
+``` r
 glimpse(un_roll_calls)
 ```
 
-```
+```         
 ## Rows: 6,202
 ## Columns: 9
 ## $ rcid          <int> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
@@ -59,15 +55,15 @@ glimpse(un_roll_calls)
 ## $ short         <chr> "AMENDMENTS, RULES OF PROCEDURE", "SECURITY COUNCIL ELEC…
 ## $ descr         <chr> "TO ADOPT A CUBAN AMENDMENT TO THE UK PROPOSAL REFERRING…
 ```
-3) `un_roll_call_issues` relates each vote to broader themes. 
 
+3)  `un_roll_call_issues` relates each vote to broader themes.
 
-```r
+``` r
 # View data 
 glimpse(un_roll_call_issues)
 ```
 
-```
+```         
 ## Rows: 5,745
 ## Columns: 3
 ## $ rcid       <int> 77, 9001, 9002, 9003, 9004, 9005, 9006, 128, 129, 130, 131,…
@@ -75,13 +71,13 @@ glimpse(un_roll_call_issues)
 ## $ issue      <fct> Palestinian conflict, Palestinian conflict, Palestinian con…
 ```
 
-```r
+``` r
 # How many votes per issue? 
-un_roll_call_issues %>% 
+un_roll_call_issues |> 
   count(issue, sort = T)
 ```
 
-```
+```         
 ## # A tibble: 6 × 2
 ##   issue                                    n
 ##   <fct>                                <int>
@@ -93,23 +89,22 @@ un_roll_call_issues %>%
 ## 6 Economic development                   765
 ```
 
-## Causact 
+## Causact
 
-The `causact` package is designed to help with the construction and use of causal models. However, it also contains some interesting datasets. Let's highlight a couple. 
+The `causact` package is designed to help with the construction and use of causal models. However, it also contains some interesting datasets. Let's highlight a couple.
 
 As usual, you can get this package by running `install.packages("causact")`
 
 ### Baseball
 
-`baseballData` contains the final scores of 12,145 baseball games played in 2010. 
+`baseballData` contains the final scores of 12,145 baseball games played in 2010.
 
-
-```r
+``` r
 library(causact)
 glimpse(baseballData)
 ```
 
-```
+```         
 ## Rows: 12,145
 ## Columns: 5
 ## $ Date         <int> 20100405, 20100405, 20100405, 20100405, 20100405, 2010040…
@@ -118,16 +113,16 @@ glimpse(baseballData)
 ## $ HomeScore    <int> 6, 6, 4, 3, 5, 6, 16, 6, 2, 3, 7, 11, 1, 3, 4, 2, 4, 3, 0…
 ## $ VisitorScore <int> 3, 0, 8, 5, 4, 3, 5, 11, 5, 5, 1, 5, 11, 5, 6, 1, 3, 6, 3…
 ```
-### Corruption 
 
-If you are more into international relations and development, `corruptDF` contains information about the human development index and the corruption perception index for different countries. 
+### Corruption
 
+If you are more into international relations and development, `corruptDF` contains information about the human development index and the corruption perception index for different countries.
 
-```r
+``` r
 glimpse(corruptDF)
 ```
 
-```
+```         
 ## Rows: 174
 ## Columns: 7
 ## $ country     <chr> "Afghanistan", "Albania", "Algeria", "Angola", "Argentina"…
@@ -143,12 +138,11 @@ glimpse(corruptDF)
 
 `ticketsDF` contains observations of the number of tickets written by NYC precincts each day between 2014 and 2015.
 
-
-```r
+``` r
 glimpse(ticketsDF)
 ```
 
-```
+```         
 ## Rows: 55,167
 ## Columns: 4
 ## $ precinct      <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
@@ -157,19 +151,18 @@ glimpse(ticketsDF)
 ## $ daily_tickets <int> 17, 67, 17, 42, 54, 109, 115, 119, 154, 95, 38, 37, 91, …
 ```
 
-## Malaria 
+## Malaria
 
-If you are interested in public health, this could be of interest. In the folder, you will find some datasets compiled from the `malariaAtlas` package. There are three datasets here. The first contais the incidence of Malaria for each country each year. 
+If you are interested in public health, this could be of interest. In the folder, you will find some datasets compiled from the `malariaAtlas` package. There are three datasets here. The first contais the incidence of Malaria for each country each year.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-11-13).
 
-
-```r
+``` r
 df <- read_csv("malaria_incidence.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 508
 ## Columns: 4
 ## $ Entity                                                                               <chr> …
@@ -177,15 +170,15 @@ glimpse(df)
 ## $ Year                                                                                 <dbl> …
 ## $ `Incidence of malaria (per 1,000 population at risk) (per 1,000 population at risk)` <dbl> …
 ```
-The second dataset contains the deaths of malaria standardized across all ages for a given country-year. 
 
+The second dataset contains the deaths of malaria standardized across all ages for a given country-year.
 
-```r
+``` r
 df <- read_csv("malaria_deaths_standard.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 6,156
 ## Columns: 4
 ## $ Entity                                                                             <chr> …
@@ -193,15 +186,15 @@ glimpse(df)
 ## $ Year                                                                               <dbl> …
 ## $ `Deaths - Malaria - Sex: Both - Age: Age-standardized (Rate) (per 100,000 people)` <dbl> …
 ```
-Finally, we have a dataset of malaria deaths but among specific age groups. 
 
+Finally, we have a dataset of malaria deaths but among specific age groups.
 
-```r
+``` r
 df <- read_csv("malaria_deaths_age_specific.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 30,780
 ## Columns: 6
 ## $ ...1      <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
@@ -214,17 +207,16 @@ glimpse(df)
 
 ## NFL Stats (2000-2017)
 
-If you are interested in Football, we have a a dataset of player stats in the NFL from 2000 to 2017. 
+If you are interested in Football, we have a a dataset of player stats in the NFL from 2000 to 2017.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-08-28).
 
-
-```r
+``` r
 df <- read_csv("nfl_stats.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 81,525
 ## Columns: 23
 ## $ ...1         <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
@@ -252,15 +244,14 @@ glimpse(df)
 ## $ position     <chr> "RB", "RB", "RB", "RB", "RB", "RB", "RB", "RB", "RB", "QB…
 ```
 
-Maybe you are interested in how the salaries for different positions have evolved across the years. We have you covered. 
+Maybe you are interested in how the salaries for different positions have evolved across the years. We have you covered.
 
-
-```r
+``` r
 df <- read_csv("nfl_salaries.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 800
 ## Columns: 11
 ## $ year                <dbl> 2011, 2011, 2011, 2011, 2011, 2011, 2011, 2011, 20…
@@ -276,20 +267,18 @@ glimpse(df)
 ## $ `Wide Receiver`     <dbl> 16250000, 14175000, 11424000, 11415000, 10800000, …
 ```
 
-## California Fires 
+## California Fires
 
-Maybe you are interested in climate change. Then, the number of California fires across years, and the damaged they have caused, might be of interest. 
+Maybe you are interested in climate change. Then, the number of California fires across years, and the damaged they have caused, might be of interest.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-08-21).
 
-
-
-```r
+``` r
 df <- read_csv("fires.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 83
 ## Columns: 4
 ## $ YEAR              <dbl> 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941…
@@ -298,19 +287,18 @@ glimpse(df)
 ## $ `DOLLAR DAMAGE`   <dbl> 318636, 563710, 165543, 1877147, 151584, 404225, 847…
 ```
 
-## TV & Movie Ratings 
+## TV & Movie Ratings
 
-We also have a dataset that contains TV & movie ratings taken from IMDB. The dataset covers titles released between 2000 and 2019. 
+We also have a dataset that contains TV & movie ratings taken from IMDB. The dataset covers titles released between 2000 and 2019.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-08).
 
-
-```r
+``` r
 df <- read_csv("tv_ratings.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,266
 ## Columns: 7
 ## $ titleId      <chr> "tt2879552", "tt3148266", "tt3148266", "tt3148266", "tt31…
@@ -324,17 +312,16 @@ glimpse(df)
 
 ## Incarceration Trends
 
-Here's a data about the people incarcerated at the county level from 1970 to 2015. This is a big dataset so it might take a while to load. 
+Here's a data about the people incarcerated at the county level from 1970 to 2015. This is a big dataset so it might take a while to load.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-22).
 
-
-```r
+``` r
 df <- read_csv("incarceration_trends.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 1,327,797
 ## Columns: 9
 ## $ year              <dbl> 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978…
@@ -348,20 +335,19 @@ glimpse(df)
 ## $ prison_population <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
 ```
 
-## Grand Slams Timeline 
+## Grand Slams Timeline
 
-If you like tennis, this could be interesting. Here's data about participation in different Grand Slams. Every observation is a player and we have information about how they did in the tournament. 
+If you like tennis, this could be interesting. Here's data about participation in different Grand Slams. Every observation is a player and we have information about how they did in the tournament.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-04-09).
 
-
-```r
+``` r
 df <- read_csv("grand_slam_timeline.csv")
 
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 12,605
 ## Columns: 5
 ## $ player     <chr> "Margaret Court", "Billie Jean Moffitt King", "Maria Bueno"…
@@ -373,16 +359,15 @@ glimpse(df)
 
 ## Emplyoment by Gender
 
-This is an interesting dataset about patterns of emplyoment, across gender, for different occupations. The dataset includes information about the type of occupational group and the share of employees who are either female or male. There is also information about the earnings for each group. 
+This is an interesting dataset about patterns of emplyoment, across gender, for different occupations. The dataset includes information about the type of occupational group and the share of employees who are either female or male. There is also information about the earnings for each group.
 
-
-```r
+``` r
 df <- read_csv("gender_employment.csv")
 
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,088
 ## Columns: 12
 ## $ year                  <dbl> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …
@@ -403,19 +388,18 @@ You can find more information [here](https://github.com/rfordatascience/tidytues
 
 ## Soccer Women's World Cup
 
-This one is close to my heart; it contains information about the outcomes of all World Cup games in the women's game. 
+This one is close to my heart; it contains information about the outcomes of all World Cup games in the women's game.
 
 You can see more information about this dataset [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-07-09).
 
-There is *free* play-to-play data for the last World Cup [here](https://github.com/statsbomb/StatsBombR), if you are interested in more detailed analysis. 
+There is *free* play-to-play data for the last World Cup [here](https://github.com/statsbomb/StatsBombR), if you are interested in more detailed analysis.
 
-
-```r
+``` r
 df <- read_csv("wwc_outcomes.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 568
 ## Columns: 7
 ## $ year           <dbl> 1991, 1991, 1991, 1991, 1991, 1991, 1991, 1991, 1991, 1…
@@ -429,18 +413,17 @@ glimpse(df)
 
 ## UFO Sightings
 
-Just a wild resource. More that 80,000 recorded UFO sightings including the length of the encounter and what shape the supposed flying object was. An incredible testament to human creativity. The dataset is big so I am not including it in the repo directly. Instead, I am going to show you how to load it directly from Github. 
+Just a wild resource. More that 80,000 recorded UFO sightings including the length of the encounter and what shape the supposed flying object was. An incredible testament to human creativity. The dataset is big so I am not including it in the repo directly. Instead, I am going to show you how to load it directly from Github.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-25).
 
-
-```r
+``` r
 ufo_sightings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv")
 
 glimpse(ufo_sightings)
 ```
 
-```
+```         
 ## Rows: 80,332
 ## Columns: 11
 ## $ date_time                  <chr> "10/10/1949 20:30", "10/10/1949 21:00", "10…
@@ -456,20 +439,18 @@ glimpse(ufo_sightings)
 ## $ longitude                  <dbl> -97.941111, -98.581082, -2.916667, -96.6458…
 ```
 
-## Nobel Prize Winners 
+## Nobel Prize Winners
 
-Here's a dataset that compiles all Nobel prize winners. It contains information about their discipline, alma mater, what the recognition was for, and much more. 
+Here's a dataset that compiles all Nobel prize winners. It contains information about their discipline, alma mater, what the recognition was for, and much more.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-05-14).
 
-
-
-```r
+``` r
 df <- read_csv("nobel_winners.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 969
 ## Columns: 18
 ## $ prize_year           <dbl> 1901, 1901, 1901, 1901, 1901, 1901, 1902, 1902, 1…
@@ -492,19 +473,18 @@ glimpse(df)
 ## $ death_country        <chr> "Germany", "France", "Germany", "Switzerland", "F…
 ```
 
-## Rap artists 
+## Rap artists
 
-In 2020, the BBC asked about 100 critics, artists, and music industry folks about their top 5 hip hop tracks. This dataset contains the aggregated results. 
+In 2020, the BBC asked about 100 critics, artists, and music industry folks about their top 5 hip hop tracks. This dataset contains the aggregated results.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-04-14).
 
-
-```r
+``` r
 df <- read_csv("rap_artists.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 311
 ## Columns: 12
 ## $ ID     <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, …
@@ -521,19 +501,18 @@ glimpse(df)
 ## $ n5     <dbl> 2, 0, 2, 5, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 2, 1, 2, 1, …
 ```
 
-## The NCAA Women's Basketball Tournament 
+## The NCAA Women's Basketball Tournament
 
-This dataset contains detailed information about how each of the teams that has qualified to the tournament since 1982 has done. 
+This dataset contains detailed information about how each of the teams that has qualified to the tournament since 1982 has done.
 
 More information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-10-06).
 
-
-```r
+``` r
 df <- read_csv("wncaa.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,092
 ## Columns: 19
 ## $ year              <dbl> 1982, 1982, 1982, 1982, 1982, 1982, 1982, 1982, 1982…
@@ -557,19 +536,18 @@ glimpse(df)
 ## $ full_percent      <dbl> 77.4, 82.8, 90.3, 62.5, 80.0, 70.4, 70.0, 56.0, 70.0…
 ```
 
-## Tour de France 
+## Tour de France
 
-Here's some cool data about the biggest cycling competition in the world. We have two datasets `tour_winners` and `tour_stages`. The former gives details about each tour overall winner. The latter gives information about each specific stage: its length, origin, destination, and winner. 
+Here's some cool data about the biggest cycling competition in the world. We have two datasets `tour_winners` and `tour_stages`. The former gives details about each tour overall winner. The latter gives information about each specific stage: its length, origin, destination, and winner.
 
 You can find more information [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-04-07)
 
-
-```r
+``` r
 df <- read_csv("tour_winners.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 106
 ## Columns: 19
 ## $ edition       <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1…
@@ -593,12 +571,12 @@ glimpse(df)
 ## $ nationality   <chr> " France", " France", " France", " France", " France", "…
 ```
 
-```r
+``` r
 df <- read_csv("tour_stages.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,236
 ## Columns: 8
 ## $ Stage          <chr> "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"…
@@ -611,13 +589,11 @@ glimpse(df)
 ## $ Winner_Country <chr> "GBR", "GER", "SVK", "FRA", "ITA", "GER", "GER", "FRA",…
 ```
 
-<<<<<<< HEAD
-## FBREF 2020-21 Football (Soccer) Data
+\<\<\<\<\<\<\< HEAD \## FBREF 2020-21 Football (Soccer) Data
 
 This is 2020-21 data on individual players from Europe's top 5 leagues. From the FBREF site. I first found the data [here](https://tonyelhabr.netlify.app/posts/dimensionality-reduction-and-clustering/). Because it is in Excel format, you will have to do an additional step it get it in. Here's some example code:
 
-
-```r
+``` r
 df <- 'FBRef 2020-21 T5 League Data.xlsx' |>  
   readxl::read_excel() |>  
   janitor::clean_names()
@@ -635,7 +611,7 @@ df <- read_csv("kids.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 23,460
 ## Columns: 6
 ## $ state            <chr> "Alabama", "Alaska", "Arizona", "Arkansas", "Californ…
@@ -646,22 +622,18 @@ glimpse(df)
 ## $ inf_adj_perchild <dbl> 3.929449, 7.548493, 3.706679, 3.891275, 4.282325, 4.3…
 ```
 
+## Video Game Trends
 
-## Video Game Trends 
+This dataset documents the amount of players that video games every month, and it records how much these numbers have changed across months.
 
-This dataset documents the amount of players that video games every month, and it records how much these numbers have changed across months. 
+For more information, you can click [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-03-16).
 
-For more information, you can click [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-03-16). 
-
-
-```r
+``` r
 df <- read_csv("video_games.csv")
->>>>>>> 3bff384 (My data)
 glimpse(df)
 ```
 
-```
-<<<<<<< HEAD
+```         
 ## Rows: 2,823
 ## Columns: 128
 ## $ player                <chr> "Patrick van Aanholt", "Yunis Abdelhamid", "Pape…
@@ -794,17 +766,9 @@ glimpse(df)
 ## $ prog_pass_received_90 <dbl> 2.34, 0.22, 0.00, 0.59, 0.70, 2.16, 0.15, 2.95, …
 ```
 
-=======
-## Rows: 83,631
-## Columns: 7
-## $ gamename      <chr> "Counter-Strike: Global Offensive", "Dota 2", "PLAYERUNK…
-## $ year          <dbl> 2021, 2021, 2021, 2021, 2021, 2021, 2021, 2021, 2021, 20…
-## $ month         <chr> "February", "February", "February", "February", "Februar…
-## $ avg           <dbl> 741013.24, 404832.13, 198957.52, 120982.64, 117742.27, 1…
-## $ gain          <dbl> -2196.42, -27839.52, -2289.67, 49215.90, -24374.98, 1808…
-## $ peak          <dbl> 1123485, 651615, 447390, 196799, 224276, 133620, 146438,…
-## $ avg_peak_perc <chr> "65.9567%", "62.1275%", "44.4707%", "61.4752%", "52.4988…
-```
+======= \## Rows: 83,631 \## Columns: 7 \## \$ gamename <chr> "Counter-Strike: Global Offensive", "Dota 2", "PLAYERUNK… \## \$ year <dbl> 2021, 2021, 2021, 2021, 2021, 2021, 2021, 2021, 2021, 20… \## \$ month <chr> "February", "February", "February", "February", "Februar… \## \$ avg <dbl> 741013.24, 404832.13, 198957.52, 120982.64, 117742.27, 1… \## \$ gain <dbl> -2196.42, -27839.52, -2289.67, 49215.90, -24374.98, 1808… \## \$ peak <dbl> 1123485, 651615, 447390, 196799, 224276, 133620, 146438,… \## \$ avg_peak_perc <chr> "65.9567%", "62.1275%", "44.4707%", "61.4752%", "52.4988…
+
+```         
 
 ## Mario Kart Records
 
@@ -818,7 +782,7 @@ df <- read_csv("world_records.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,334
 ## Columns: 9
 ## $ track           <chr> "Luigi Raceway", "Luigi Raceway", "Luigi Raceway", "Lu…
@@ -832,12 +796,12 @@ glimpse(df)
 ## $ record_duration <dbl> 1, 0, 12, 7, 54, 0, 0, 27, 0, 64, 3, 0, 90, 132, 1, 74…
 ```
 
-```r
+``` r
 df <- read_csv("drivers.csv")
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 2,250
 ## Columns: 6
 ## $ position <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
@@ -850,18 +814,17 @@ glimpse(df)
 
 ## Olympic Medals
 
-Here's a comprehensive dataset of athletes who have won medals in the Olympic games. Given that the dataset is quite heavy, I will show you how to load it directly. 
+Here's a comprehensive dataset of athletes who have won medals in the Olympic games. Given that the dataset is quite heavy, I will show you how to load it directly.
 
 For more information go [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-07-27).
 
-
-```r
+``` r
 # Read in data 
 df  <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-07-27/olympics.csv')
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 271,116
 ## Columns: 15
 ## $ id     <dbl> 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, …
@@ -881,19 +844,18 @@ glimpse(df)
 ## $ medal  <chr> NA, NA, NA, "Gold", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
 ```
 
-## College Sports Budgets 
+## College Sports Budgets
 
-This might be one might peak your interest. It is a detailed dataset about how colleges spend their sports budgets, and how much they get back in revenue. This one is also quite big so we will read it directly. 
+This might be one might peak your interest. It is a detailed dataset about how colleges spend their sports budgets, and how much they get back in revenue. This one is also quite big so we will read it directly.
 
-[Here's](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-03-29/readme.md) more information about the data.  
+[Here's](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-03-29/readme.md) more information about the data.
 
-
-```r
+``` r
 df  <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-29/sports.csv')
 glimpse(df)
 ```
 
-```
+```         
 ## Rows: 132,327
 ## Columns: 28
 ## $ year                 <dbl> 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2…
@@ -926,5 +888,4 @@ glimpse(df)
 ## $ sports               <chr> "Baseball", "Basketball", "All Track Combined", "…
 ```
 
-
->>>>>>> 3bff384 (My data)
+> > > > > > > 3bff384 (My data)
