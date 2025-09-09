@@ -32,3 +32,6 @@
 
 # no htmls for demos
 /demos/*.html
+
+# no lecture notes
+/lecture-notes/
