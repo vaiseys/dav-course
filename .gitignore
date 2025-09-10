@@ -19,7 +19,8 @@
 /homework/*.html
 
 # don't add rendered demos
-/demos/*.html
+/demos/2023/*.html
+/demos/2025/*.html
 /old_demos/*.html
 /output/
 
