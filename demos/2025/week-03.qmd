@@ -1,0 +1,131 @@
+---
+title: "Week 3"
+format: html
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Libraries
+
+I'm going to load the _few_ packages that I need for this. No more than I need this time. ***I really mean it***.
+
+```{r}
+library(tidyverse)
+library(worldfootballR)
+```
+
+## Original code for getting the data
+
+```{r}
+# library(worldfootballR)
+# 
+# d <- fb_match_results(
+#   country = "ENG",
+#   gender = "M",
+#   season_end_year = c(2023, 2024, 2025) # three most recent
+# )
+# 
+# saveRDS(d, file = "Data/EPL_2023_2025.rds")
+```
+
+
+## Load the data
+
+NOTE: This will not work for you if you don't have a file called `EPL_2023_2025.rds` that lives inside a `Data` folder (with a capital "D" in my case).
+
+```{r}
+d <- readRDS(here::here("Data", "EPL_2023_2025.rds"))
+
+```
+
+
+## Pipe
+
+```{r}
+# simple mean
+d |> 
+  pull(HomeGoals) |> 
+  mean()
+
+# piping to bar plot (ugly)
+d |> 
+  ggplot(aes(x = HomeGoals)) +
+  geom_bar()
+
+```
+
+## filter()
+
+```{r}
+# if I want the opening two weeks of each season
+openingmatches <- d |> 
+  filter(Wk == "1" | Wk == "2")
+
+# I want Liverpool's opening matches of each season
+lfcopeners <- d |> 
+  filter(Wk == "1") |> 
+  filter(Home == "Liverpool" | Away == "Liverpool")
+
+# a messier way
+d3 <- d |> 
+  filter(Wk == "1" & (Home == "Liverpool" | Away == "Liverpool"))
+
+```
+
+## an aside that teaches us mutate()
+
+```{r}
+d <- d |> 
+  mutate(week = as.integer(Wk)) |> 
+  mutate(nilnil = if_else(HomeGoals == 0 & AwayGoals == 0, 1, 0)) |> 
+  mutate(nilniltext = if_else(HomeGoals == 0 & AwayGoals == 0, "Yes", "No"))
+
+```
+
+## select()
+
+```{r}
+d_subset <- d |> 
+  select(Home, Away, HomeGoals, AwayGoals, nilnil)
+
+d_subset |> 
+  slice(1:10)
+
+```
+
+## simpler mutate()
+
+```{r}
+d <- d |> 
+  mutate(TotalGoals = HomeGoals + AwayGoals)
+  
+```
+
+## summarize()
+
+```{r}
+mean(d$TotalGoals)
+
+mg <- d |> 
+  summarize(mean_goals = mean(TotalGoals),
+            home_mean = mean(HomeGoals),
+            away_mean = mean(AwayGoals))
+
+```
+
+## group_by() to summarize()
+
+```{r}
+gpw <- d |> 
+  group_by(week) |> 
+  summarize(mean_goals = mean(TotalGoals),
+            num_games = n())
+
+gpht <- d |> 
+  group_by(Home) |> 
+  summarize(mean_goals = mean(HomeGoals),
+            num_games = n())
+
+```
+
