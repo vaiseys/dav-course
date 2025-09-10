@@ -102,7 +102,7 @@ The result you get using `group_by` and `arrange` contains a lot of information.
 
 Let's practice creating new variables. I am interested in the records that have held for longer than 100 days. Create a new variable that is a `1` if `record_duration` is higher than 100 or 0 otherwise. 
 
-Now, grouping by player, tell me the total amount of long duration records each player holds. What player has the most long duration records? 
+Now, grouping by player, tell me the total number of long duration records each player holds. What player has the most long duration records? 
 
 ## Question 7 
 
