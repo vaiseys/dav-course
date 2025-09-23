@@ -1,11 +1,10 @@
 # Chapter 5 - Data Visualization
 
-Here, we are going to practice some of the skills emphasized in Chapter 5. At first, it may seem that a lot of the skills are similar to those we learned in Modern Dive. I have two responses to that. First, you are right; repetition is important. That's how we learn things. Second, this chapter presents some incredibly handy tricks that as a Data Analyst you will use all the time. In these exercises, we are going to be using data from the WNCAA tournament. 
+Here, we are going to practice some of the skills emphasized in Chapter 5. At first, it may seem that a lot of the skills are similar to those we learned in Modern Dive. I have two responses to that. First, you are right; repetition is important. That's how we learn things. Second, this chapter presents some incredibly handy tricks that as a Data Analyst you will use all the time. In these exercises, we are going to be using data from the WNCAA tournament.
 
-As always, let's begin by reading in the data. 
+As always, let's begin by reading in the data.
 
-
-```r
+``` r
 library(tidyverse)
 # Read in the data 
 wncaa <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Data/wncaa.csv")
@@ -14,7 +13,7 @@ wncaa <- read_csv("https://raw.githubusercontent.com/vaiseys/dav-course/main/Dat
 glimpse(wncaa)
 ```
 
-```
+```         
 ## Rows: 2,092
 ## Columns: 19
 ## $ year              <dbl> 1982, 1982, 1982, 1982, 1982, 1982, 1982, 1982, 1982…
@@ -40,75 +39,74 @@ glimpse(wncaa)
 
 We have data for all teams that have made it to the WNCAA tournament. We have a wealth of information from `reg_percent`, the percentage of wins in the regular season, to the place they ended in a given tournament (`tourney_finish`).
 
+> Note: The original data comes from [here](https://github.com/rfordatascience/tidytuesday/tree/main/data/2020/2020-10-06).
+
 ## Question 1
 
-Let's practice some of the summarizing skills that Healy introduces. We are going to examine the percentage of tournaments that schools have won. 
+Let's practice some of the summarizing skills that Healy introduces. We are going to examine the percentage of tournaments that schools have won.
 
-First, `filter` the dataset for observations where `tourney_finish` equals `Champ`. 
+First, `filter` the dataset for observations where `tourney_finish` equals `Champ`.
 
+Now, use `group_by` and `summarize` to calculate the number of tournament championships each team has, and then the percentage of tournaments each team has.
 
-
-Now, use `group_by` and `summarize` to calculate the percentage of tournaments each team has. 
-
-> Hint: look at the first code chunk of the chapter. 
-
-
-
-Plot a bar plot that shows these percentages by school. 
+Plot a bar plot that shows these percentages by school.
 
 What patterns do you see? Who are the two teams that have won the most?
 
-## Question 2 
+## Question 2
 
-Let's now look at how the top teams have been seeded as they enter into the tournament. Let's begin by creating a dataset that includes just the "top teams". How are we going to do this? Well, let's take the teams that show up in your bar plot above. We are going to work with the dataset that only includes teams that have ever won the tournament. I'll show you how to do it. 
+Let's now look at how the top teams have been seeded as they enter into the tournament. Let's begin by creating a dataset that includes just the "top teams". How are we going to do this? Well, let's take the teams that show up in your bar plot above. We are going to work with the dataset that only includes teams that have ever won the tournament. I'll show you how to do it.
 
-The dataset I created for the plot above is called `champs`. Let's get the names of the champions: 
+The dataset I created for the plot above is called `champs`. Let's get the names of the champions:
 
-
-```r
+``` r
 champ_names <- unique(champs$school)
 ```
 
-Now, we filter our original name so that only these schools are included. 
+Now, we filter our original name so that only these schools are included.
 
-
-```r
+``` r
 winners <- wncaa |> 
   filter(school %in% champ_names)
 ```
 
-Now, make a plot that shows boxplots for the distribution of `seeds` for each school. Make sure you use `coord_flip()` so that the school names are legible. 
+Now, make a plot that shows boxplots for the distribution of `seeds` for each school.
 
-These days, it's good practice to add all the data points in addition to the boxplot. You can use `geom_jitter()` to do this. Don't forget to use `outlier.shape = NA` in the boxplot so you don't plot the outliers twice. 
+These days, it's good practice to add all the data points in addition to the boxplot. You can use `geom_jitter()` to do this. Don't forget to use `outliers = FALSE` in the boxplot so you don't plot the outliers twice.
 
-We will also want to organize the plots so that they convey information more clearly. Use the `reorder()` trick to show the distributions in a an  order that is easier to understand. You will need to calculate some school-specific statistics to use for the reordering. (You might find `group_by()` and `mutate()` valuable here, although there are several ways to do this.)
+We will also want to organize the plots so that they convey information more clearly.
 
-Describe the results? Any surprises? 
+> Hint: Use the `reorder()` trick to show the distributions in a an order that is easier to understand. You will need to calculate some school-specific statistics to use for the reordering. You could also look into the equivalent `fct_reorder()` function. (There are many ways to do this).
+
+Describe the results? Any surprises?
 
 Try to make the same plot using `geom_violin()` instead of `geom_boxplot()`. Which visualization do you think is more informative? There's no right answer here but provide some reasoning to justify your choice.
 
-## Question 3 
+## Question 3
 
-Try making the plot above but using `geom_point` only. Why does it not work very well? 
+Try making the plot above but using `geom_point` only. Why does it not work very well?
 
-## Question 4 
+## Question 4
 
-Okay, now let's try the `summarize_if()` verb. Let's make a new data frame by taking the `winners` dataset, grouping by school, and take the `mean()` and `sd()` of the columns **if** they are numeric. HINT: you can also use the newer `across()` syntax for this if you prefer. It looks like this:
+Okay, now let's try the `summarize()` verb. Let's make a new data frame by taking the `winners` dataset, grouping by school, and take the `mean()` and `sd()` of the columns *if* they are numeric.
 
-```
-winners_mean_sd <- winners |> 
-  group_by(school) |> 
-  summarize(across(where(is.numeric),
-                   list(mean = mean,
-                        sd = sd)))
-```
+> NOTE: The book uses a version of this function called `summarize_if()`. Some years ago a new function called `across()` was introduced, which we can use like this:
+>
+> ```         
+> winners_mean_sd <- winners |> 
+>   group_by(school) |> 
+>   summarize(across(where(is.numeric), list(avg = mean, sd = sd)))
+> ```
+>
+> You can read more about this function [here](https://dplyr.tidyverse.org/articles/colwise.html).
 
-
-Let's explore the average win percentage of these schools across the seasons. In your new dataset, this column should be called `reg_percent_mean`. Make a dot plot, where this column is in the y-axis and school is the x-axis. Again, use our tricks, `coord_flip` and `reorder` to make the plot legible. (Or you can specify the proper axes from the start if you like. Sometimes this is easier, but not always!)
+Let's explore the average win percentage of these schools across the seasons. In your new dataset, this column should be called `reg_percent_avg`. Make a dot plot, where this column is in the x-axis and school is the y-axis. (Use `reorder` to make the plot legible).
 
 Describe the results. Which tournament winner had the lowest regular season win percentage?
 
-Now, let's try to take into account the standard deviation. Use the `geom_pointrange` to show the intervals of one standard deviation below and above the mean (just like Figure 5.15 in the online version of socviz.co).
+Now, let's try to take into account the standard deviation. Use the `geom_pointrange` to show the intervals of one standard deviation below and above the mean (just like Figure 5.15 in [socviz.co](https://socviz.co/workgeoms.html)).
+
+> HINT: This requires `xmax` and `xmin` arguments inside the aesthetic mapping.
 
 What is the school with the narrowest interval? What does this mean?
 
