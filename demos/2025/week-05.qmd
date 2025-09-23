@@ -1,0 +1,181 @@
+---
+title: "Week 5"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+Load needed libraries.
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(hrbrthemes)
+theme_set(theme_light())
+```
+
+## Joins
+
+Joins allow us to combine datasets.
+
+```{r}
+data(flights)      # flights
+data(airlines)     # carrier names
+```
+
+```{r}
+ggplot(flights,
+       aes(x = carrier,
+           y = dep_delay)) +
+  geom_boxplot(alpha = .1)
+
+```
+
+```{r}
+d <- left_join(flights, airlines, by = "carrier")
+```
+
+```{r}
+flights <- flights |> 
+  mutate(name = case_match(carrier,
+                           "AA" ~ "American",
+                           "UA" ~ "United",
+                           "B6" ~ "Jet Blue",
+                           .default = "too tired"))
+```
+
+## New geoms
+
+### geom_bar()
+
+```{r}
+ggplot(flights,
+       aes(x = carrier)) +
+  geom_bar()
+```
+
+Let's create a variable with the counts.
+
+```{r}
+flights <- flights |> 
+  mutate(flight_count = n(), .by = carrier)
+```
+
+Let's use this info in the plot.
+
+```{r}
+ggplot(flights,
+       aes(x = reorder(carrier, -flight_count))) +
+  geom_bar() +
+  labs(x = "Carrier",
+       y = "# of flights")
+```
+
+Or, we could just get and the use the stuff we need.
+
+```{r}
+flights |>
+  group_by(carrier) |> 
+  summarize(num_flights = n()) |>
+  ggplot(aes(x = reorder(carrier, -num_flights),
+             y = num_flights)) +
+  geom_col() +
+  labs(x = "Carrier",
+       y = "# flights",
+       title = "Flight volume out of NYC, 2014")
+```
+
+```{r}
+flights |>
+  group_by(carrier) |> 
+  summarize(num_flights = n()) |>
+  left_join(airlines) |> 
+  ggplot(aes(y = reorder(name, num_flights),
+             x = num_flights)) +
+  geom_col() +
+  labs(y = "",
+       x = "# flights",
+       title = "Flight volume out of NYC, 2014") +
+  scale_x_continuous(labels = scales::label_comma(),
+                     breaks = seq(0, 60000, 10000)) +
+  theme_minimal(base_family = "Arial Narrow")
+```
+
+
+### group_by() and summarize()
+
+### geom_col()
+
+```{r}
+flights |>
+  group_by(carrier) |>
+  mutate(dep_delay_inf = if_else(!is.na(dep_delay),
+                                        dep_delay,
+                                        Inf)) |> 
+  summarize(mdd = median(dep_delay_inf)) |>
+  left_join(airlines) |>
+  ggplot(aes(y = reorder(name, mdd),
+             x = mdd)) +
+  geom_col() +
+  labs(y = "",
+       x = "Median departure delay",
+       title = "Median delay out of NYC, 2014") +
+  theme_minimal(base_family = "Arial Narrow")
+```
+
+```{r}
+flights |>
+  group_by(carrier) |>
+  mutate(dep_delay_inf = if_else(!is.na(dep_delay),
+                                        dep_delay,
+                                        Inf),
+         delay30 = if_else(dep_delay_inf < 30, 0, 1)) |>
+  summarize(pdelay = mean(delay30)) |> 
+  left_join(airlines) |>
+  ggplot(aes(x = pdelay,
+             y = reorder(name, -pdelay))) +
+  geom_col() +
+  scale_x_continuous(labels = scales::label_percent()) +
+  labs(x = "",
+       y = "",
+       title = "Percent of flights delayed 30+ minutes",
+       subtitle = "NYC origin flights, 2014") +
+  theme_minimal(base_family = "Arial Narrow")
+```
+
+```{r}
+flights |> 
+  group_by(carrier, month) |> 
+  summarize(nflights = n()) |>
+  mutate(meanflights = mean(nflights),
+         maxflights = max(nflights),
+         minflights = min(nflights)) |> 
+  left_join(airlines) |>
+  filter(meanflights > 2000) |> 
+  ggplot(aes(x = nflights,
+             xmax = maxflights,
+             xmin = minflights,
+             y = reorder(name, meanflights))) +
+  geom_point(alpha = .2) +
+  geom_linerange()
+
+
+```
+
+
+
+### geom_density() as histogram alternative
+
+### geom_bin_2d() as scatter alternative
+
+### geom_boxplot() and geom_violin() for bivariate
+
+x = month vs. x = factor(month)
+
+### group_by() |> summarize() to geom_pointrange()
+
+
+
+
+
+
