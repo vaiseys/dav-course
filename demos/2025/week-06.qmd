@@ -1,0 +1,132 @@
+---
+title: "Week 6"
+format: html
+embed-resources: true
+---
+
+First I'm going to load any packages I need.
+
+```{r}
+library(tidyverse)
+```
+
+Now I will import the data. I got it from https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset
+
+(Make sure you have the data in a "data" folder under where this file lives. Otherwise it will not work!)
+
+```{r}
+d <- read_csv("data/day.csv")
+d <- read_csv(here::here("data", "day.csv"))
+```
+
+"Tidy data"
+
+Let's plot the number of casual vs. registered riders.
+
+```{r}
+ggplot(d,
+       aes(x = casual,
+           y = registered,
+           color = as.logical(workingday))) +
+  geom_point(alpha = .2) +
+  theme_light(base_family = "Arial Narrow") +
+  labs(x = "Casual riders",
+       y = "Registered riders",
+       color = "Working day?")
+
+```
+
+I want a cleaner variable to distinguish working and non-working days.
+
+```{r}
+d <- d |> 
+  mutate(daytype = if_else(workingday == 1,
+                           "Work day",
+                           "Non work day"))
+```
+
+```{r}
+ggplot(d,
+       aes(x = casual,
+           y = registered,
+           color = daytype)) +
+  geom_point(alpha = .4) +
+  theme_light(base_family = "Arial Narrow") +
+  labs(x = "Casual riders",
+       y = "Registered riders",
+       color = "Day type") 
+```
+
+
+Toward a bar plot that we want to see...
+
+```{r}
+nd <- d |> 
+  group_by(weekday) |> 
+  summarize(mean_cas = mean(casual),
+            mean_reg = mean(registered))
+
+ld <- nd |> 
+  pivot_longer(c(mean_cas, mean_reg),
+               names_to = "type",
+               names_prefix = "mean_",
+               values_to = "mriders")
+
+```
+
+Data are in shape. 
+
+```{r}
+ggplot(ld,
+       aes(x = weekday,
+           y = mriders,
+           group = type,
+           fill = type)) +
+  geom_col(position = "dodge") +
+  theme_minimal(base_family = "Arial Narrow")
+
+```
+
+```{r}
+ld <- ld |> 
+  mutate(
+    
+    # Make a character version of weekday
+    
+    weekday_chr = case_match(
+      weekday,
+      0 ~ "Sun",
+      1 ~ "Mon",
+      2 ~ "Tues",
+      3 ~ "Weds",
+      4 ~ "Thu",
+      5 ~ "Fri",
+      6 ~ "Sat"),
+    
+    # make a numeric version of weekday that goes from 1 to 7
+    
+    weekday7 = if_else(weekday == 0, 7, weekday),
+    
+    # a more legible version of type
+    
+    ridertype = if_else(type == "cas", "Casual", "Registered")
+  )
+```
+
+```{r}
+ggplot(ld,
+       aes(x = reorder(weekday_chr, weekday7),
+           y = mriders,
+           group = ridertype,
+           fill = ridertype)) +
+  geom_col(position = "dodge") +
+  theme_minimal(base_family = "Arial Narrow") +
+  labs(x = "",
+       y = "Mean # of Riders",
+       fill = "Type of Rider",
+       title = "Bikeshare Users by Day of Week",
+       subtitle = "Washington, DC 2011-2012",
+       caption = "Data from https://...")
+
+```
+
