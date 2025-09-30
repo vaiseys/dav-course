@@ -11,29 +11,27 @@ library(tidyverse)
 
 ## Question 1 
 
-We have done this a couple of times but I want to reinforce how handy of a trick this is. It turns out you can read in data directly from the internet. 
+We have done this a couple of times but I want to reinforce how useful it is to read in data directly from the Internet. 
 
-Go to this [link](https://github.com/vaiseys/dav-course/blob/main/Data/nfl_salaries.csv). Yes, I recognize that this is the course repository. 
+Go to this [link](https://github.com/vaiseys/dav-course/blob/main/Data/nfl_salaries.csv). (Yes, this is the course repository). 
 
 Then, click on a button that says `Raw`. Once you see the the raw data, copy the link. Now, use `read_csv` but pass the link (inside quotation marks) as an argument.
-
 
 ## Question 2 
 
 This dataset is clearly not in a tidy format. Reshape it so that every row tells you the salary associated with a position each year. Your new dataset should have three columns: `year`, `position`, `salary`. 
 
-
-
 ## Question 3 
 
 Of course, there are many folks in each position and their salaries vary widely. Let's look at quarterbacks for example. Filter your newly created dataset so that it only contains quarterbacks. Then, make a histogram where salary is in the x-axis. Then use `facet_wrap` to get the histogram for each `year`. 
 
-What patterns do you notice? 
+What patterns do you notice?
+
+> Hint: I will remove points if you ignore this question. What patterns do you notice?
 
 ## Question 4 
 
 Let's calculate the average salary for each position, each year. Create a new dataset that contains the average salary for each position each year. To do this, you will need the `group_by` and `summarize` combo. 
-
 
 > Hint: Beware of a couple of NAs in there 
 
