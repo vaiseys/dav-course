@@ -1,22 +1,23 @@
 # Chapter 5 - Modern Dive
 
-We are getting into more complex topics, like how to fit and interpret models. In this section, we will use all the tools we have learned - from wrangling to visualization - to make sure we fit appropriate models and that we understand what these models are doing. Models can be powerful inferential tools but they can also be misleading (like anything). It is important that we know what is powering the machinery we are using so that we always know whether to trust the results we get. 
+We are getting into more complex topics, like how to fit and interpret models. In this section, we will use all the tools we have learned—from wrangling to visualization—to make sure we fit appropriate models and that we understand what these models are doing. Models can be powerful inferential tools but they can also be misleading (like anything). It is important that we know what is powering the machinery we use so that we always know whether to trust the results we get.
 
-In this homework, we are going to be analyzing twitch data. We will learn a couple of tricks for modeling data along the way. 
+In this homework, we are going to be analyzing twitch data. We will learn a couple of tricks for modeling data along the way.
 
-Let's begin by loading the data in our usual way. 
+Let's begin by loading the data in our usual way.
 
-
-```r
+``` r
 library(tidyverse)
 
-twitch_data <- read_csv("https://github.com/vaiseys/dav-course/blob/main/Data/twitchdata-update.csv")
+url <- "https://raw.githubusercontent.com/vaiseys/dav-course/refs/heads/main/Data/twitchdata-update.csv"
+twitch_data <- read_csv(url)
 ```
 
-The names of th variables here are a bit annoying. They are capitalized and have spaces which makes them awkward to work with in R. Let me show you a neat trick. First, install a package called `janitor` if you don't have it yet. Then, let's load it and clean the names. 
+The names of the variables here are a bit annoying. They are capitalized and have spaces which makes them awkward to work with in R. Let me show you a neat trick. First, install a package called `janitor` if you haven't done so yet.
 
+Then, let's load it and "clean" the names.
 
-```r
+``` r
 library(janitor)
 twitch_data <- clean_names(twitch_data)
 
@@ -24,60 +25,70 @@ twitch_data <- clean_names(twitch_data)
 colnames(twitch_data)
 ```
 
-```
+```         
 ##  [1] "channel"             "watch_time_minutes"  "stream_time_minutes"
 ##  [4] "peak_viewers"        "average_viewers"     "followers"          
 ##  [7] "followers_gained"    "views_gained"        "partnered"          
 ## [10] "mature"              "language"
 ```
 
-Look at how much better they look. We are ready to begin our analysis. 
+Look at how much better they look. We are ready to begin our analysis.
 
-## Question 1 
+## Question 1
 
-We will begin with an easy question. An almost obvious question. We are going to examine whether the number of followers a streamer has is predictive of the average viewers they get. Following what the chapter told us, let's look at the raw data. Show me the `average_viewers` and the `followers` for five random streamers. What do you notice? 
+We will begin with an easy question. An almost obvious question. We are going to examine whether the number of followers a streamer has is predictive of the average viewers they get. Following what the chapter told us, let's look at the raw data. Show me the `average_viewers` and the `followers` for five random streamers. What do you notice?
 
-Now, let's summarize these two variables. An alternative way you get a summary of your variables of interest is by running `summary()` on them. `Select` our two variables of interest and run `summary()`. Describe the results in a few words. Does anything capture your attention? 
+Now, let's summarize these two variables. An alternative way you get a summary of your variables of interest is by running `summary()` on them. `select()` our two variables of interest and pipe them into `summary()`. Describe the results in a few words. Does anything capture your attention?
 
-Okay, lastly - but perhaps most importantly - lets visualize the data. Make a scatterplot with our two variables of interest. 
+Okay, lastly - but perhaps most importantly - lets visualize the data. Make a scatterplot with our two variables of interest.
 
-What do you notice? 
+What do you notice?
 
-Right away, you should notice that the data is packed into a small part of the Cartesian plane. Why? Because we have an uneven distribution - a few channels with a lot of followers and a lot of average viewers. So what should we do? We can transform the data. Remember the `scale_x_log10` trick we learned in the last book? Let's apply it. Make the same plot but adding `scale_x_log10` and `scale_y_log10`. What do you see now? How does the relationship look like?
+Right away, you should notice that the data is packed into a small part of the Cartesian plane. Why? Because we have an uneven distribution - a few channels with a lot of followers and a lot of average viewers. So what should we do? We can *transform* the data. Make the same plot but adding `scale_x_log10` and `scale_y_log10`. What do you see now? How does the relationship look like?
 
-Hopefully you have learned something important here: often the relationship between two variables is not immediately obvious and we need to do some transformations of the data to uncover it. Let's add those transformed variables to our dataset. 
+> Hint: You can change the default way in which R prints large numbers with the labels argument.
+>
+> ``` r
+> ... + scale_x_log10(labels = scales::label_comma())
+> ```
+>
+> Although my favorite for this type of transformation is `scales::label_log()`.
 
+Hopefully you have learned something important here: often the relationship between two variables is not immediately obvious and we need to do some transformations of the data to uncover it. Let's add those transformed variables to our dataset.
 
-```r
+``` r
 twitch_data <- twitch_data |> 
   mutate(log_viewers = log10(average_viewers), 
          log_followers = log10(followers))
 ```
 
-## Question 2 
+> Note: In general, it only make sense to apply a logarithmic transformation to *positive* numbers, such as the number of followers and number of average viewers. As you saw, none of these values are ever zero. What happens if you take the log of zero?
 
-Let's actually run a regression. Using `lm()` fit a model where you predict the logarithm of average viewers (`log_viewers`) using the logarithm of followes (`log_followers`). Save the results to an object called `fit1`.
+## Question 2
 
-I am going to show you another way of getting a summary of your model. First, let's install the `broom` package. After, run `tidy()` on your model object (`fit1`). 
+Let's actually run a regression. Using `lm()` fit a model where you predict the logarithm of average viewers (`log_viewers`) using the logarithm of followers (`log_followers`). Save the results to an object called `fit1`.
 
+I am going to show you another way of getting a summary of your model. First, let's install the `broom` package. After, run `tidy()` on your model object (`fit1`).
 
+Before I have you describe your results I have to tell you that when you transform your variables, interpretation is a bit different. In the situation we are in—where your outcome and explanatory variables have been logged—the coefficients are interpreted as percentage increases.
 
+For example, let's say we have a coefficient of $\beta = 0.4$.
 
-Before I have you describe your results I have to tell you that when you transform your variables, interpretation is a bit different. In the situation we are in - where your outcome and explanatory variables have been logged - the coefficients are interpreted as percentage increases. For example, let's say we have a coefficient of $0.4$. We would do the following: 
+We can then interpret this coefficient as saying that:
 
-$$ 1.1^{0.4} = 1.03886 $$
-And we would interpret our coefficient like this: 
+-   A 10% increase in followers is associated with a 3.9% increase in the average number of viewers, which comes from the average number of viewers by a factor of $1.1^{0.4} = 1.03886$;
 
-> A 10% increase in followers is associated with a 3.9% increase in the average number of viewers. 
+-   a 100% increase in followers is associated with a 32% increase in the average number of viewers, which comes from the average number of viewers by a factor of $2^{0.4} = 1.3195$;
 
-Now, it's your turn. Take the coefficient from your model and interpret it in this way. 
+-   and so on.
 
-## Question 3 
+Now, it's your turn. Take the coefficient from your model and interpret it in this way.
 
-Okay, now let's look at our line of best fit and check the residuals. I am again going to introduce you to an incredibly useful tool from the `broom` package called `augment`. Run the following code: 
+## Question 3
 
+Okay, now let's look at our line of best fit and check the residuals. I am again going to introduce you to an incredibly useful tool from the `broom` package called `augment`. Run the following code:
 
-```r
+``` r
 library(broom)
 
 pred_data <- augment(fit1)
@@ -86,7 +97,7 @@ pred_data <- augment(fit1)
 glimpse(pred_data)
 ```
 
-```
+```         
 ## Rows: 1,000
 ## Columns: 8
 ## $ log_viewers   <dbl> 4.442731, 4.408410, 4.040444, 3.887280, 4.471321, 4.6275…
@@ -99,10 +110,9 @@ glimpse(pred_data)
 ## $ .std.resid    <dbl> 1.3420109, 0.8227954, 0.5389316, -0.6251793, 0.5953620, …
 ```
 
-Look, it's our original data but also a bunch more information. The `.fitted` column includes our predictions given our line of best fit. `.resid` contans the residuals. Let's visualize our line of best fit: 
+Look, it's our original data but also a bunch more information. The `.fitted` column includes our predictions given our line of best fit. `.resid` contans the residuals. Let's visualize our line of best fit:
 
-
-```r
+``` r
 pred_data |> 
   ggplot(aes(x = log_followers, 
              y = log_viewers)) +
@@ -117,39 +127,36 @@ pred_data |>
        y = "log(viewers)")
 ```
 
-![](chapter_05_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](nico_plot.png){width="60%"}
 
-Do you think our model describes the relationship well? 
+Do you think our model describes the relationship well?
 
 Now, you fit a plot where `log_followers` is in the x-axis and `.resid` is in the y-axis.
 
-What do you see? Are there any big residuals? DO they happen often in a particular range of our x-variable? If so, we would have a problem: our model would systematically fail to predict part of our data. 
+What do you see? Are there any big residuals? Do they happen often in a particular range of our x-variable? If so, we would have a problem: our model would systematically fail to predict part of our data.
 
-## Question 4 
+## Question 4
 
-Let's now look at regression using one categorical variable to predict one continuous variable. Here, I am interested in whether `language` predicts `average_viewers`. This would give us an indication of where the most popular twitch channels come from. I have a hunch that English streamers might be the most popular. Let's see. 
+Let's now look at regression using one categorical variable to predict one continuous variable. Here, I am interested in whether `language` predicts `average_viewers`. This would give us an indication of where the most popular twitch channels come from. I have a hunch that English streamers might be the most popular. Let's see.
 
-First, describe our variables of interest as we did above. I am going to give you less guidance here. I want you to explore: 
+First, describe our variables of interest as we did above. I am going to give you less guidance here. I want you to explore:
 
-1) The raw data
-2) Summaries of the variables
-3) Plot the variables
+1)  The raw data
+2)  Summaries of the variables
+3)  Plot the variables
 
-## Question 5 
+## Question 5
 
-Now, we are ready to fit the model. Fit a linear regression where your outcome variable is `average_viewers` and your independent variable is `language`. Let me teach you another trick here. When your categorical variable has many categories it makes sense to establish your reference category *outside of the model*. This ensures that, when you are reading your coefficients, you know what you are comparing them to. Let's set `English` as our reference category. 
+Now, we are ready to fit the model. Fit a linear regression where your outcome variable is `average_viewers` and your independent variable is `language`. Let me teach you another trick here. When your categorical variable has many categories it makes sense to establish your reference category *outside of the model*. This ensures that, when you are reading your coefficients, you know what you are comparing them to. Let's set `English` as our reference category.
 
-
-```r
+``` r
 twitch_data <- twitch_data |> 
   mutate(language = as.factor(language), 
          language = relevel(language, ref = "English"))
 ```
 
-Now, fit your model. Your coefficients will tell you how many more (or fewer) average viewers are related to streaming in languages different than English. 
-Interpret the results. How is my prediction doing? 
+Now, fit your model. Your coefficients will tell you how many more (or fewer) average viewers are related to streaming in languages different than English. Interpret the results. How is my prediction doing?
 
 ## Question 6
 
-Explore the residuals here using a similar plot as above. There are a couple of points our model really missed - which ones were they? 
-
+Explore the residuals here using a similar plot as above. There are a couple of points our model really missed - which ones were they?
