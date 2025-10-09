@@ -127,7 +127,7 @@ pred_data |>
        y = "log(viewers)")
 ```
 
-![](nico_plot.png){width="60%"}
+<img src="nico_plot.png" width="60%"/>
 
 Do you think our model describes the relationship well?
 
