@@ -1,0 +1,125 @@
+---
+title: "Week 9"
+format: html
+embed-resources: true
+---
+
+```{r}
+library(tidyverse)
+library(hrbrthemes)
+library(broom)
+library(ggrepel)
+theme_set(theme_ipsum())
+```
+
+Bring in EPL data.
+
+```{r}
+d <- read_rds(here::here("data", "EPL_2023_2025.rds"))
+```
+
+
+```{r}
+home <- d |>
+  janitor::clean_names() |> 
+  select(season = season_end_year,
+         week = wk,
+         team = home,
+         opponent = away,
+         scored = home_goals,
+         conceded = away_goals,
+         xg_for = home_x_g,
+         xg_against = away_x_g) |> 
+  mutate(home = 1)
+
+away <- d |>
+  janitor::clean_names() |> 
+  select(season = season_end_year,
+         week = wk,
+         team = away,
+         opponent = home,
+         scored = away_goals,
+         conceded = home_goals,
+         xg_for = away_x_g,
+         xg_against = home_x_g) |> 
+  mutate(home = 0)
+
+d <- bind_rows(home, away) |> 
+  mutate(week = as.integer(week))
+```
+
+
+```{r}
+d <- d |> 
+  mutate(points = case_when(
+    scored > conceded ~ 3,
+    scored < conceded ~ 0,
+    scored == conceded ~ 1
+  ))
+
+```
+
+
+```{r}
+m1 <- lm(points ~ scored + conceded,
+         data = d)
+broom::tidy(m1) |> select(term, estimate)
+
+m0 <- lm(points ~ conceded,
+         data = d)
+broom::tidy(m0) |> select(term, estimate)
+
+```
+
+```{r}
+ggplot(d,
+       aes(x = scored,
+           y = conceded)) +
+  geom_jitter(alpha = .1,
+              width = .25,
+              height = .25) +
+  scale_x_continuous(breaks = 0:8) +
+  scale_y_continuous(breaks = 0:8) +
+  geom_smooth(method = "lm",
+              se = FALSE)
+```
+
+```{r}
+dm <- d |> 
+  group_by(season, team) |> 
+  summarize(total = sum(points),
+            scored = sum(scored),
+            conceded = sum(conceded)) |> 
+  arrange(season, -total)
+
+```
+
+```{r}
+ggplot(dm,
+       aes(x = total)) +
+  geom_density() +
+  facet_wrap(~season)
+```
+
+
+```{r}
+mod1 <- lm(total ~ scored + conceded,
+           data = dm)
+broom::tidy(mod1) |> select(term, estimate)
+```
+
+```{r}
+dm <- augment(mod1, newdata = dm)
+```
+
+```{r}
+ggplot(dm,
+       aes(x = .fitted,
+           y = .resid,
+           label = team)) +
+  geom_point(alpha = .5) +
+  geom_text_repel(size = 1.5) +
+  geom_hline(yintercept = 0,
+             color = "red")
+```
+
