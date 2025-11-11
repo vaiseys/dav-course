@@ -123,7 +123,7 @@ Here's the same info.
 head(bowl, n = 10)
 ```
 
-Let's take a sample.
+Let's take a sample. It will be different every time you run it.
 
 ```{r}
 shovel1 <- bowl |> 
@@ -133,6 +133,8 @@ shovel1 |>
   mutate(is_red = if_else(color == "red", 1L, 0L)) |> 
   summarize(prop_red = mean(is_red))
 ```
+
+Run the below over and over again!
 
 ```{r}
 shovels100 <- 
@@ -146,9 +148,12 @@ shovels100 <-
 shovels100 |> 
   ggplot(aes(x = prop_red)) +
   geom_histogram(boundary = .5,
-                 binwidth = .10,
-                 color = "white")
+                 binwidth = .05,
+                 color = "white") +
+  scale_x_continuous(limits = c(0,1))
 ```
+
+Run the below over and over!
 
 ```{r}
 shovels100_big <- 
@@ -163,7 +168,8 @@ shovels100_big |>
   ggplot(aes(x = prop_red)) +
   geom_histogram(boundary = .5,
                  binwidth = .025,
-                 color = "white")
+                 color = "white") +
+  scale_x_continuous(limits = c(0,1))
 
 ```
 
@@ -267,7 +273,7 @@ Let's check uncertainty of estimates.
 ```{r}
 reps <- gss2018 |> 
   rep_sample_n(size = 2220,
-               reps = 1000,
+               reps = 10000,
                replace = TRUE) |> 
   group_by(replicate) |> 
   summarize(prop_cons = mean(conservative))
@@ -277,5 +283,5 @@ ggplot(reps,
        aes(x = prop_cons )) +
   geom_histogram(color = "white",
                  boundary = .3,
-                 binwidth = .01)
+                 binwidth = .001)
 ```
