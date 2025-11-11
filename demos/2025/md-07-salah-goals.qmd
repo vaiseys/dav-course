@@ -1,0 +1,55 @@
+---
+title: "Week 10"
+format: html
+embed-resources: true
+---
+
+```{r}
+library(tidyverse)
+library(moderndive)
+library(broom)
+library(hrbrthemes)
+theme_set(theme_ipsum())
+```
+
+```{r}
+d <- read_rds(here::here("Data", "LFC_shots_2024.rds"))
+```
+
+Let's keep the Liverpool shots.
+
+```{r}
+d <- d |> 
+  filter((away_team == "Liverpool" & home_away == "a") |
+         (home_team == "Liverpool" & home_away == "h")) |> 
+  mutate(goal = if_else(result == "Goal", 1, 0))
+```
+
+Let's look at Mo Salah.
+
+```{r}
+mo <- d |> 
+  filter(player == "Mohamed Salah") |> 
+  mutate(shot_number = 1:n(),
+         num_goals = cumsum(goal),
+         conversion_rate = num_goals / shot_number,
+         upper90ci = qbeta(0.95, num_goals + 1, 
+                           shot_number - num_goals),
+         lower90ci = qbeta(0.05, num_goals + 1, 
+                           shot_number - num_goals)) 
+```
+
+Let's plot.
+
+```{r}
+ggplot(mo,
+       aes(x = shot_number,
+           y = conversion_rate,
+           ymin = lower90ci,
+           ymax = upper90ci)) +
+  geom_ribbon(color = "lightgray", alpha = .1) +
+  geom_line()
+
+
+```
+
