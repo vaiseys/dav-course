@@ -40,7 +40,7 @@ ggplot() +
   labs(x = "Proportion")
 ```
 
-![](nico_plot_chapter7.png){width="75%"}
+<img src="nico_plot_chapter7.png" width="70%"/>
 
 Now, let's say our friend gives us a random sample of 25 Nobel winners and we calculate our proportion. How far off would we be?
 
@@ -63,7 +63,7 @@ ggplot() +
   labs(x = "Proportion")
 ```
 
-![](nico_plot_chapter7_2.png){width="75%"}
+<img src="nico_plot_chapter7_2.png" width="70%"/>
 
 We are way above, almost at 50%!
 
